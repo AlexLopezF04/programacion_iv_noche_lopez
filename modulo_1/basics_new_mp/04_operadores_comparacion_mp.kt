@@ -4,10 +4,10 @@ fun main() {
     val numero1 = 10
     val numero2 = 3
     
-    println("numero1 == numero2 ${numero1== numero2}")
+    println("numero1 == numero2 ${numero1 == numero2}")
     println("numero1 != numero2 ${numero1 != numero2}")
     println("numero1 > numero2 ${numero1 > numero2}")
-    println("numero1 < numero2 ${numer1 < numero2}")
+    println("numero1 < numero2 ${numero1 < numero2}")
     println("numero1 >= numero2 ${numero1 >= numero2}")
     println("numero1 <= numero2 ${numero1 <= numero2}")
     
@@ -17,5 +17,6 @@ fun main() {
     println("string1 === string2 ${string1 === string2}")
     println("string1 == string2 ${string1 == string2}")
     println("string1.equals(string2) ${string1.equals(string2)}")
+    
     
 }

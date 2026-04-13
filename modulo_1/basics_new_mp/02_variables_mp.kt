@@ -45,11 +45,9 @@ fun main() {
     println("Nombre Completo: ${primerNombre.uppercase()} ${primerApellido.uppercase()}")
     
     /*
-     Comentario
-     de
-     varias
-     lineas.
+     Comentario de varias
+     lineas
     */
     
-    // Comentario de una sola linea. 
+    // Una sola linea
 }
