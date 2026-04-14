@@ -1,11 +1,11 @@
 //Operadores aritmeticos
 fun main() {
     
-    val numero1=10
-    val numero2=2
+    val numero1 = 10
+    val numero2 = 2
     
     println("Suma")
-    println("numero1+numero2=${numero1+numero2}")
+    println("numero1 + numero2 = ${numero1+numero2}")
     println("Resta")
     println("numero1-numero2= ${numero1-numero2}")
     println("Multiplicacion")
@@ -23,7 +23,7 @@ fun main() {
     println("x-=3 ${x}")
     x*=2
     println("x*3 ${x}")
-    x/=4
+    x/=4    
     println("x/=3 ${x}")
     x%=4
     println("x%3 ${x}")
