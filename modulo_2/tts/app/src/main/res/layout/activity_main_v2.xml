@@ -25,7 +25,7 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_marginTop="50dp"
-            app:srcCompat="@drawable/logoUTE" />
+            app:srcCompat="@drawable/logo_color" />
 
         <EditText
             android:id="@+id/editTextText"

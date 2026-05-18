@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.ute.compose"
+    namespace = "com.ute.tts"
     compileSdk {
         version = release(36)
     }
@@ -46,6 +46,4 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation("androidx.compose.material:material-icons-extended")
-
 }
