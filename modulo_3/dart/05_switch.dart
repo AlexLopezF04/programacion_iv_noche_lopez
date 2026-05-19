@@ -19,7 +19,7 @@ void main() {
   }
 
   // Switch expresión — asigna el resultado a una variable
-  String codigoHttp = '404';
+  codigoHttp = '404';
 
   String descripcion = switch (codigoHttp) {
     '200' => 'OK — solicitud exitosa',
