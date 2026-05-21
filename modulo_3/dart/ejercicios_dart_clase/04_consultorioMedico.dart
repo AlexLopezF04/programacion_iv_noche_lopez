@@ -19,25 +19,20 @@ Promedio de pacientes por doctor
 import 'dart:io';
 
 void main() {
-  // Variables acumuladoras para el reporte final (fuera del ciclo)
   int totalPacientesGral = 0;
   int cantidadDoctores = 0;
 
   print('--- REGISTRO DE CONTROL MÉDICO ---');
 
-  // Primera lectura para evaluar la condición del bucle
   stdout.write('\nHoras trabajadas por el doctor (0 para salir): ');
   int horas = int.parse(stdin.readLineSync()!);
 
-  // El ciclo continúa mientras las horas sean mayores a 0
   while (horas > 0) {
     stdout.write('Cantidad de pacientes atendidos: ');
     int pacientes = int.parse(stdin.readLineSync()!);
 
-    // --- CÁLCULOS POR DOCTOR ---
     double pacientesPorHora = pacientes / horas;
 
-    // Determinar el ritmo de atención según las reglas de negocio
     String ritmoAtencion;
     if (pacientesPorHora < 3) {
       ritmoAtencion = 'Atención lenta';
@@ -47,22 +42,17 @@ void main() {
       ritmoAtencion = 'Atención rápida';
     }
 
-    // Mostrar el resultado individual de este doctor
     print('\n>> Resultados del Doctor:');
     print('   - Pacientes por hora: ${pacientesPorHora.toStringAsFixed(2)} ($ritmoAtencion)');
     print('--------------------------------------------------');
 
-    // --- ACUMULACIÓN DE DATOS GLOBALES ---
     totalPacientesGral += pacientes;
     cantidadDoctores++;
 
-    // Volver a pedir las horas para la siguiente iteración
     stdout.write('\nHoras trabajadas por el siguiente doctor (0 para salir): ');
     horas = int.parse(stdin.readLineSync()!);
   }
 
-  // --- REPORTE FINAL ---
-  // Validamos que se haya registrado al menos un doctor para evitar dividir por cero
   if (cantidadDoctores > 0) {
     double promedioPacientesPorDoctor = totalPacientesGral / cantidadDoctores;
 

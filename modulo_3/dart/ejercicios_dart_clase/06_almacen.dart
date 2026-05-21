@@ -44,20 +44,13 @@ void main() {
       rendimientoDelDia = 'Alto rendimiento';
     }
 
-    // Le mostramos al usuario cómo le fue en este día específico
     print('   -> Rendimiento del día $dia: $rendimientoDelDia');
 
-    // ¡La parte más importante! Sumamos las ventas de hoy a nuestro total acumulado
     totalVentasVendedor = totalVentasVendedor + ventasDelDia; 
-    // Nota: También se puede escribir más cortito como: totalVentasVendedor += ventasDelDia;
   }
 
-  // 3. Ya salimos del ciclo (ya pasaron los 7 días). Ahora hacemos las cuentas finales del vendedor.
-  
-  // Para el promedio, dividimos el total de ventas para los 7 días
-  double promedioVentas = totalVentasVendedor / 7;
+    double promedioVentas = totalVentasVendedor / 7;
 
-  // Ahora evaluamos el rendimiento GENERAL del vendedor usando su promedio diario
   String rendimientoGeneral;
   if (promedioVentas < 10) {
     rendimientoGeneral = 'Bajo rendimiento';
@@ -67,7 +60,6 @@ void main() {
     rendimientoGeneral = 'Alto rendimiento';
   }
 
-  // 4. Mostramos los resultados finales en la pantalla
   print('\n==================================================');
   print('          REPORTE FINAL DEL VENDEDOR              ');
   print('==================================================');

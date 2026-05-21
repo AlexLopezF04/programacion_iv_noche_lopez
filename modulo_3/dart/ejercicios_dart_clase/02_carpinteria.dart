@@ -16,20 +16,16 @@ Promedio de muebles por trabajador
 import 'dart:io';
 
 void main() {
-  // Variables acumuladoras para el reporte final (fuera del ciclo)
   int totalMueblesGral = 0;
   int cantidadTrabajadores = 0;
 
   print('--- CONTROL DE PRODUCCIÓN: FABRICACIÓN DE MUEBLES ---');
 
-  // Primera lectura: Solicitamos los muebles del primer empleado
   stdout.write('\nCantidad de muebles fabricados por el empleado (0 para salir): ');
   int muebles = int.parse(stdin.readLineSync()!);
 
-  // El ciclo continúa mientras la cantidad de muebles sea mayor a 0
   while (muebles > 0) {
     
-    // --- EVALUACIÓN SEGÚN REGLAS DE NEGOCIO ---
     String nivelProduccion;
     if (muebles < 3) {
       nivelProduccion = 'Producción baja';
@@ -39,21 +35,16 @@ void main() {
       nivelProduccion = 'Producción alta';
     }
 
-    // Mostrar el resultado individual de este empleado
     print('>> Rendimiento del empleado: $nivelProduccion');
     print('--------------------------------------------------');
 
-    // --- ACUMULACIÓN DE DATOS GLOBALES ---
     totalMueblesGral += muebles;
     cantidadTrabajadores++;
 
-    // Volver a solicitar datos para la siguiente iteración
     stdout.write('\nCantidad de muebles fabricados por el siguiente empleado (0 para salir): ');
     muebles = int.parse(stdin.readLineSync()!);
   }
 
-  // --- REPORTE FINAL ---
-  // Validamos que se haya registrado al menos un trabajador para evitar la división por cero
   if (cantidadTrabajadores > 0) {
     double promedioMueblesPorTrabajador = totalMueblesGral / cantidadTrabajadores;
 

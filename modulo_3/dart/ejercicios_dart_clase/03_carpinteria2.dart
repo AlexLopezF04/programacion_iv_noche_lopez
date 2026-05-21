@@ -16,20 +16,16 @@ Promedio de tablas por operario
 import 'dart:io';
 
 void main() {
-  // Variables acumuladoras para el reporte final (fuera del ciclo)
   int totalTablasGral = 0;
   int cantidadOperarios = 0;
 
   print('--- CONTROL DE PRODUCCIÓN: TALLER DE CARPINTERÍA ---');
 
-  // Primera lectura: Solicitamos las tablas del primer operario
   stdout.write('\nCantidad de tablas cortadas por el operario (0 para salir): ');
   int tablas = int.parse(stdin.readLineSync()!);
 
-  // El ciclo continúa mientras la cantidad de tablas sea mayor a 0
   while (tablas > 0) {
     
-    // --- EVALUACIÓN SEGÚN REGLAS DE NEGOCIO ---
     String evaluacionTrabajo;
     if (tablas < 15) {
       evaluacionTrabajo = 'Trabajo lento';
@@ -39,21 +35,16 @@ void main() {
       evaluacionTrabajo = 'Trabajo sobresaliente';
     }
 
-    // Mostrar el resultado individual de este operario
     print('>> Rendimiento del operario: $evaluacionTrabajo');
     print('--------------------------------------------------');
 
-    // --- ACUMULACIÓN DE DATOS GLOBALES ---
     totalTablasGral += tablas;
     cantidadOperarios++;
 
-    // Volver a solicitar datos para la siguiente iteración
     stdout.write('\nCantidad de tablas cortadas por el siguiente operario (0 para salir): ');
     tablas = int.parse(stdin.readLineSync()!);
   }
 
-  // --- REPORTE FINAL ---
-  // Validamos que se haya registrado al menos un operario para evitar la división por cero
   if (cantidadOperarios > 0) {
     double promedioTablasPorOperario = totalTablasGral / cantidadOperarios;
 

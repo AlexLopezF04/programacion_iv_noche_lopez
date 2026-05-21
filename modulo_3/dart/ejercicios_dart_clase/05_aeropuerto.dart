@@ -27,7 +27,6 @@ Promedio general de retraso por vuelo
 import 'dart:io';
 
 void main() {
-  // Variables para acumular los totales generales (fuera del ciclo)
   int totalPasajerosGral = 0;
   int totalRetrasoGral = 0;
   int totalVuelosGral = 0;
@@ -35,24 +34,19 @@ void main() {
 
   print('--- REGISTRO DE OPERACIONES DEL AEROPUERTO ---');
 
-  // Solicitamos la primera entrada para evaluar la condición del ciclo
   stdout.write('\nCantidad de vuelos atendidos por el agente (0 para salir): ');
   int vuelos = int.parse(stdin.readLineSync()!);
 
-  // El ciclo continúa mientras la cantidad de vuelos sea mayor a 0
   while (vuelos > 0) {
-    // Solicitar el resto de datos del agente actual
     stdout.write('Cantidad de pasajeros procesados: ');
     int pasajeros = int.parse(stdin.readLineSync()!);
 
     stdout.write('Minutos totales de retraso: ');
     int minutosRetraso = int.parse(stdin.readLineSync()!);
 
-    // --- CÁLCULOS POR AGENTE ---
     double pasajerosPorVuelo = pasajeros / vuelos;
     double retrasoPorVuelo = minutosRetraso / vuelos;
 
-    // Determinar el nivel de eficiencia según las reglas de negocio
     String eficiencia;
     if (pasajerosPorVuelo < 50) {
       eficiencia = 'Baja eficiencia';
@@ -62,25 +56,20 @@ void main() {
       eficiencia = 'Alta eficiencia';
     }
 
-    // Mostrar los resultados individuales del agente
     print('\n>> Resultados del Agente:');
     print('   - Pasajeros por vuelo: ${pasajerosPorVuelo.toStringAsFixed(2)} ($eficiencia)');
     print('   - Índice de retraso por vuelo: ${retrasoPorVuelo.toStringAsFixed(2)} min/vuelo');
     print('--------------------------------------------------');
 
-    // --- ACUMULACIÓN DE DATOS GLOBALES ---
     totalPasajerosGral += pasajeros;
     totalRetrasoGral += minutosRetraso;
     totalVuelosGral += vuelos;
     cantidadAgentes++;
 
-    // Preguntar de nuevo para la siguiente iteración o romper el ciclo
     stdout.write('\nCantidad de vuelos atendidos por el siguiente agente (0 para salir): ');
     vuelos = int.parse(stdin.readLineSync()!);
   }
 
-  // --- REPORTES FINALES (Fuera del ciclo) ---
-  // Solo mostramos resultados si se registró al menos un agente para evitar divisiones por cero
   if (cantidadAgentes > 0) {
     double promedioPasajerosPorAgente = totalPasajerosGral / cantidadAgentes;
     double promedioGralRetrasoPorVuelo = totalRetrasoGral / totalVuelosGral;
