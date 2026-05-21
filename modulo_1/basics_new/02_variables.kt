@@ -1,16 +1,16 @@
 
 fun main() {
-    //Val Inmutable
+    // Val Inmutable
     val nombre = "Alexander Lopez"
     val edad: Int = 26
 
-    //Var mutable
+    // Var mutable
     var contador = 0
     contador = contador + 1
     
     println("$nombre tiene $edad años")
     
-    //Tipos de datos
+    // Tipos de datos
     val numero1: Byte = 127
     val numero2: Short = 32_767
     val numero3: Int = 12
@@ -27,15 +27,15 @@ fun main() {
     
     val booleano: Boolean = true
     
-    //Caracteres
+    // Caracteres
     val caracter: Char = 'k'
     val cadena: String = "Klotin"
     val inferido = "string"
     
     println("Tipo de inferido: ${inferido::class.simpleName}")
     
-    //Utilidades de String
-    //Expresiones
+    // Utilidades de String
+    // Expresiones
 	val primerNombre="Alexander"
     val primerApellido="Lopez"
     val primerNombreMayuscula=primerNombre.uppercase()
@@ -45,9 +45,11 @@ fun main() {
     println("Nombre Completo: ${primerNombre.uppercase()} ${primerApellido.uppercase()}")
     
     /*
-     Comentario de varias
-     lineas
+     Comentario
+     de
+     varias
+     lineas.
     */
     
-    // Una sola linea
+    // Comentario de una sola linea. 
 }
