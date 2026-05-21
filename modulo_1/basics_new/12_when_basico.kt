@@ -1,5 +1,6 @@
 fun main() {
     println("Condicional When")
+primer-corte
     println("Código de especialidad? (1-7)")
     println("1 -> Medicina general")
     println("2 -> Pediatria")
@@ -22,4 +23,15 @@ fun main() {
     }
 
     println("Especialidad: $especialidad")
+=======
+    println("Codigo de especialidad? (1-7)")
+    println("")
+
+    val codigo = readLine()?. toIntOrNull()?: 0
+    val = especialidad = when(codigo){
+        1 -> ""
+    }
+
+
+main
 }

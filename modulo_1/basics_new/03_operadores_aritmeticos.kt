@@ -5,8 +5,12 @@ fun main() {
     val numero2 = 2
     
     println("Suma")
+primer-corte
     println("numero1 + numero2 = ${numero1 + numero2}")
     
+=======
+    println("numero1 + numero2 = ${numero1+numero2}")
+main
     println("Resta")
     println("numero1 - numero2 = ${numero1 - numero2}")
    
@@ -20,6 +24,7 @@ fun main() {
     println("numero1 % numero2 = ${numero1 % numero2}")
     
     println("Operadores de Asignacion Compuestas")
+primer-corte
     var x = 10
     x + = 5
     println("x + = 5 ${x}")
@@ -31,6 +36,19 @@ fun main() {
     println("x / = 3 ${x}")
     x % = 4
     println("x % 3 ${x}")
+=======
+    var x=10
+    x+=5
+    println("x+=5 ${x}")
+    x-=3
+    println("x-=3 ${x}")
+    x*=2
+    println("x*3 ${x}")
+    x/=4    
+    println("x/=3 ${x}")
+    x%=4
+    println("x%3 ${x}")
+main
     
     // Incremento decremento
     var contador = 0
