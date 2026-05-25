@@ -1,4 +1,9 @@
+<<<<<<< HEAD
+// ui/Paso01_TextField.kt
+package com.tuapp.contactos.ui
+=======
 package com.ute.compose.material
+>>>>>>> d65a445713ce997906dc8d4c48b05c2f4a692906
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -17,7 +22,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
+<<<<<<< HEAD
+fun Paso01_TextFieldScreen() {
+=======
 fun Paso01TextFieldScreen() {
+>>>>>>> d65a445713ce997906dc8d4c48b05c2f4a692906
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -80,9 +89,12 @@ private fun DemoFormularioContacto() {
     var telefono   by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
     var verPass    by remember { mutableStateOf(false) }
+<<<<<<< HEAD
+=======
     var numero1   by remember { mutableStateOf("") }
     var numero2 by remember { mutableStateOf("") }
     var resultado by remember { mutableStateOf("") }
+>>>>>>> d65a445713ce997906dc8d4c48b05c2f4a692906
 
     // Validaciones derivadas del estado — se recalculan en cada recomposición
     val nombreValido   = nombre.trim().length >= 2
@@ -205,6 +217,15 @@ private fun DemoFormularioContacto() {
         ) {
             Text(if (formularioValido) "Guardar contacto ✓" else "Completa todos los campos")
         }
+<<<<<<< HEAD
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun Paso01_Preview() {
+    MaterialTheme { Paso01_TextFieldScreen() }
+=======
 
         OutlinedTextField(
             value           = numero1,
@@ -256,4 +277,5 @@ private fun Sumar(numero1: String, numero2: String) {
 @Composable
 fun Paso01Preview() {
     MaterialTheme { Paso01TextFieldScreen() }
+>>>>>>> d65a445713ce997906dc8d4c48b05c2f4a692906
 }
