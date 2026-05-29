@@ -1,45 +1,55 @@
-// Clase base — comportamiento y datos comunes
-class Animal {
-  final String nombre;
-  final int    edadAnios;
+// === 1. CLASE BASE (Comportamiento y datos comunes) ===
+class Certificado {
+  final String estudianteNombre;
+  final String codigoVerificacion;
 
-  Animal(this.nombre, this.edadAnios);
+  Certificado(this.estudianteNombre, this.codigoVerificacion);
 
-  // Método que cada subclase debe especializar
-  String hacerSonido() => '...';
+  // Método que cada subclase va a especializar mediante anulación (@override)
+  String obtenerTipoCredencial() => 'Credencial Genérica';
 
-  // Método común — reutilizado sin cambios por todas las subclases
-  void presentarse() {
-    print('Soy $nombre, tengo $edadAnios años y hago: ${hacerSonido()}');
+  // Método común — Reutilizado de forma idéntica por todas las subclases hijas
+  void generarDocumentoOficial() {
+    print('📜 Certificado [$codigoVerificacion] emitido para: $estudianteNombre | Tipo: ${obtenerTipoCredencial()}');
   }
 }
 
-// HERENCIA: Perro y Gato reutilizan Animal y lo especializan
-class Perro extends Animal {
-  Perro(super.nombre, super.edadAnios);
+// === 2. HERENCIA: Reutilizan la clase madre y la especializan ===
+
+// Subclase A: Certificado específico para un curso individual
+class CertificadoCurso extends Certificado {
+  // Usamos "super.nombrePropiedad" para delegar la inicialización directo al constructor base
+  CertificadoCurso(super.estudianteNombre, super.codigoVerificacion);
 
   @override
-  String hacerSonido() => '¡Guau!';
+  String obtenerTipoCredencial() => 'Acreditación de Curso Individual ✔️';
 
-  void buscarPelota() => print('$nombre busca la pelota 🎾');
+  // Método exclusivo de esta subclase
+  void compartirEnLinkedIn() => print('🔗 $estudianteNombre publicó su insignia de curso en su perfil profesional.');
 }
 
-class Gato extends Animal {
-  Gato(super.nombre, super.edadAnios);
+// Subclase B: Certificado de Alta Complejidad para una Carrera Completa
+class CertificadoCarrera extends Certificado {
+  CertificadoCarrera(super.estudianteNombre, super.codigoVerificacion);
 
   @override
-  String hacerSonido() => '¡Miau!';
+  String obtenerTipoCredencial() => 'Diploma de Carrera / Full-Stack Track 🎓';
 
-  void trepar() => print('$nombre trepa al árbol 🌳');
+  // Método exclusivo de esta subclase
+  void descargarHistorialProyectos() => print('🗂️ Descargando el portafolio de proyectos aprobados ligado al código: $codigoVerificacion.');
 }
 
 void main() {
-  final perro = Perro('Rex', 3);
-  final gato  = Gato('Misu', 5);
+  // Instanciación de las subclases hijas pasándole datos a través del super constructor
+  final certIndividual = CertificadoCurso('Alex Lopez', 'CERT-CUR-884');
+  final certEspecializado = CertificadoCarrera('BaconJ Pachar', 'CERT-TRACK-001');
 
-  perro.presentarse();  // Soy Rex, tengo 3 años y hago: ¡Guau!
-  gato.presentarse();   // Soy Misu, tengo 5 años y hago: ¡Miau!
+  // Ejecución de métodos heredados de la clase base
+  certIndividual.generarDocumentoOficial(); 
+  certEspecializado.generarDocumentoOficial(); 
 
-  perro.buscarPelota();
-  gato.trepar();
+  // Ejecución de comportamientos especializados y únicos de cada objeto
+  certIndividual.compartirEnLinkedIn();
+  certEspecializado.customAction(); // En tu estructura original: gato.trepar() -> aquí descargarHistorialProyectos()
+  certEspecializado.descargarHistorialProyectos();
 }

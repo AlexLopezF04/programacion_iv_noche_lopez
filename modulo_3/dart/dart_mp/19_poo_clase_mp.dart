@@ -1,59 +1,60 @@
-class Dispositivo {
-  // 1. Propiedades
+class Curso {
+  // === 1. PROPIEDADES ===
   final String id;
-  final String nombre;
-  String       ip;
-  bool         _encendido = false;  // _ indica uso interno
+  final String titulo;
+  double       precio;
+  bool         _publicado = false;  // El guion bajo (_) lo vuelve privado para uso interno del archivo
 
-  // 2. Constructor nombrado con parámetros nombrados
-  Dispositivo({
+  // === 2. CONSTRUCTOR CON PARÁMETROS NOMBRADOS ===
+  Curso({
     required this.id,
-    required this.nombre,
-    required this.ip,
+    required this.titulo,
+    required this.precio,
   });
 
-  // 3. Getter — propiedad derivada, solo lectura
-  bool   get encendido => _encendido;
-  String get estado    => _encendido ? 'activo' : 'inactivo';
+  // === 3. GETTERS (Propiedades derivadas de solo lectura) ===
+  bool   get publicado => _publicado;
+  String get estado    => _publicado ? 'disponible' : 'en borrador';
 
-  // 4. Setter — escritura controlada
-  set estadoEncendido(bool valor) {
-    _encendido = valor;
-    print('$nombre: ${valor ? "encendido" : "apagado"}');
+  // === 4. SETTER (Escritura y validación controlada) ===
+  set cambiarEstadoPublicacion(bool valor) {
+    _publicado = valor;
+    print('Cambio de estado en "$titulo": ${valor ? "Publicado oficialmente" : "Movido a borrador"}');
   }
 
-  // 5. Métodos
-  void conectar() {
-    _encendido = true;
-    print('$nombre conectado en $ip');
+  // === 5. MÉTODOS DE INSTANCIA ===
+  void lanzarCurso() {
+    _publicado = true;
+    print('🚀 El curso "$titulo" ya está en línea al precio de \$$precio USD.');
   }
 
-  void desconectar() {
-    _encendido = false;
-    print('$nombre desconectado');
+  void deshabilitarCurso() {
+    _publicado = false;
+    print('⚠️ El curso "$titulo" ha sido retirado temporalmente de la tienda.');
   }
 
-  String resumen() => 'ID: $id | Nombre: $nombre | IP: $ip | Estado: $estado';
+  String resumen() => 'ID: $id | Curso: $titulo | Costo: \$$precio | Estado: $estado';
 
-  // 6. toString
+  // === 6. TOSTRING OVERRIDE (Personaliza la impresión del objeto en consola) ===
   @override
-  String toString() => 'Dispositivo($nombre, $ip, $estado)';
+  String toString() => 'Curso($titulo, \$$precio, $estado)';
 }
 
 void main() {
-  // Crear una instancia
-  final router = Dispositivo(
-    id:     'DEV-001',
-    nombre: 'router-principal',
-    ip:     '192.168.1.1',
+  // Crear una instancia de la clase Curso
+  final cursoBackend = Curso(
+    id:     'CUR-044',
+    titulo: 'Desarrollo Backend con NestJS y PostgreSQL',
+    precio: 49.99,
   );
 
-  // Usar sus métodos y propiedades
-  router.conectar();
-  print(router.estado);       // activo
-  print(router.resumen());
-  print(router);              // llama toString() automáticamente
+  // Usar los métodos y propiedades de la instancia
+  cursoBackend.lanzarCurso();
+  print(cursoBackend.estado);       // disponible
+  print(cursoBackend.resumen());
+  print(cursoBackend);              // Llama al método toString() modificado automáticamente
 
-  router.estadoEncendido = false;  // usa el setter
-  print(router.encendido);   // false
+  // Modificar el estado usando el Setter expuesto
+  cursoBackend.cambiarEstadoPublicacion = false; // Usa el setter
+  print(cursoBackend.publicado);   // false
 }

@@ -1,34 +1,51 @@
-class CuentaBancaria {
-  final String titular;
-  double _saldo;  // privado — nadie lo modifica directamente
+class ProgresoEstudiante {
+  final String estudiante;
+  final String cursoTitulo;
+  int _minutosVistos; // Propiedad privada — protegida contra modificaciones externas directas
 
-  CuentaBancaria(this.titular, double saldoInicial)
-      : _saldo = saldoInicial;
+  ProgresoEstudiante(this.estudiante, this.cursoTitulo, int minutosIniciales)
+      : _minutosVistos = minutosIniciales;
 
-  // Getter — lectura permitida, escritura no
-  // double get saldo => _saldo;
+  // Getter — Permite leer el progreso de forma pública pero impide su sobreescritura directa
+  int get minutosVistos => _minutosVistos;
 
-  // Los únicos caminos para modificar _saldo
-  void depositar(double monto) {
-    if (monto <= 0) throw ArgumentError('El monto debe ser positivo');
-    _saldo += monto;
-    print('Depósito de \$$monto. Nuevo saldo: \$$_saldo');
+  // === ÚNICOS CAMINOS PERMITIDOS PARA MODIFICAR EL ESTADO INTERNO ===
+
+  // Método para registrar tiempo de estudio consumido en el reproductor de video
+  void registrarAvanceVideo(int minutosEstudiados) {
+    if (minutosEstudiados <= 0) {
+      throw ArgumentError('El tiempo reproducido debe ser un valor positivo.');
+    }
+    _minutosVistos += minutosEstudiados;
+    print('▶️ [$estudiante] Estudió $minutosEstudiados min más en "$cursoTitulo". Total acumulado: $_minutosVistos min.');
   }
 
-  void retirar(double monto) {
-    if (monto <= 0)      throw ArgumentError('El monto debe ser positivo');
-    if (monto > _saldo)  throw StateError('Saldo insuficiente');
-    _saldo -= monto;
-    print('Retiro de \$$monto. Nuevo saldo: \$$_saldo');
+  // Método para corregir o restar tiempo en caso de auditoría (ej. si el sistema detecta inactividad)
+  void auditarTiempoInactivo(int minutosPenalizados) {
+    if (minutosPenalizados <= 0) {
+      throw ArgumentError('El tiempo a penalizar debe ser un valor positivo.');
+    }
+    if (minutosPenalizados > _minutosVistos) {
+      throw StateError('No se puede restar más tiempo del progreso acumulado actual.');
+    }
+    _minutosVistos -= minutosPenalizados;
+    print('⚠️ [Auditoría] Se descontaron $minutosPenalizados min por inactividad. Total actual: $_minutosVistos min.');
   }
 }
 
 void main() {
-  final cuenta = CuentaBancaria('Ana López', 500.0);
+  // Inicializamos el progreso del estudiante con 120 minutos ya completados
+  final progreso = ProgresoEstudiante('Alex Lopez', 'Master en NestJS con Dart', 120);
 
-  cuenta.depositar(200.0);  // Depósito de $200.0. Nuevo saldo: $700.0
-  cuenta.retirar(150.0);    // Retiro de $150.0.  Nuevo saldo: $550.0
-  print(cuenta._saldo);      // 550.0
+  // El sistema interactúa de forma segura a través de los métodos públicos
+  progreso.registrarAvanceVideo(45);   // Agrega minutos con éxito
+  progreso.auditarTiempoInactivo(20);  // Resta minutos tras validar las reglas
+  
+  // === NOTA DE SINTAXIS SOBRE LA PRIVACIDAD EN DART ===
+  // Como 'main' y 'ProgresoEstudiante' residen en este mismo archivo, Dart permite leer '_minutosVistos':
+  print('Consulta interna (mismo archivo): ${progreso._minutosVistos}'); 
 
-  // cuenta._saldo = 999999;  // ERROR — privado, Dart no lo permite
+  // REGLA DE ORO: Si mueves la clase 'ProgresoEstudiante' a su propio archivo independiente 
+  // e intentas hacer esto desde el main, Dart lanzará un error de compilación definitivo:
+  // progreso._minutosVistos = 9999; // ❌ ERROR: El miembro '_minutosVistos' no está definido para la clase.
 }

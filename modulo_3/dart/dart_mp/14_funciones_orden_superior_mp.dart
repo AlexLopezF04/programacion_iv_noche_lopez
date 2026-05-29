@@ -1,40 +1,63 @@
 void main() {
-  final precios = [29.99, 49.50, 15.00, 99.99];
+  // ==========================================
+  // === 1. METODO .map() (Transformación) ===
+  // ==========================================
+  
+  // Caso A: Tu ejemplo de precios con IVA encaja perfecto en la facturación del e-learning.
+  // Nota: En Ecuador se maneja justamente el IVA al 15%, ideal para el cálculo local.
+  final preciosCursos = [29.99, 49.50, 15.00, 99.99];
 
-  // map devuelve un Iterable con cada elemento transformado
-  final preciosConIva = precios.map((p) => p * 1.15);
+  // .map() devuelve un Iterable. Lo convertimos a lista con .toList() para imprimirlo.
+  final preciosConIva = preciosCursos.map((precio) => precio * 1.15);
+  print('=== Precios de Cursos con IVA (15%) ===');
   print(preciosConIva.toList());
-  // [34.4885, 56.925, 17.25, 114.9885]
-
-  // map sobre Strings
-  final endpoints = ['/usuarios', '/productos', '/pedidos'];
-  final urls = endpoints.map((e) => 'https://api.ejemplo.com$e');
-  print(urls.toList());
-  // [https://api.ejemplo.com/usuarios, ...]
 
 
-// Temperatura:
-    final temperaturas = [36.1, 37.8, 39.2, 36.5, 38.7, 35.9];
-
-  final conFiebre = temperaturas.where((t) => t > 37.5);
-  print(conFiebre.toList());  // [37.8, 39.2, 38.7]
-
-  final normales = temperaturas.where((t) => t >= 36.0 && t <= 37.5);
-  print(normales.toList());   // [36.1, 36.5]
+  // Caso B: Transformar slugs o endpoints en URLs completas para consumir la API de videos.
+  final rutasLecciones = ['/introduccion', '/variables-dart', '/poo-avanzado'];
+  final urlVideosCompletas = rutasLecciones.map((ruta) => 'https://api.edutesh.com/v1$ruta');
+  
+  print('\n=== URLs de streaming generadas para el reproductor ===');
+  print(urlVideosCompletas.toList());
 
 
-// Venta:
-    final ventas = [1500.0, 2300.0, 980.0, 3100.0, 750.0];
+  // ==========================================
+  // === 2. METODO .where() (Filtrado)     ===
+  // ==========================================
+  
+  // Cambiamos la lista de temperaturas por las calificaciones obtenidas por los alumnos en un examen.
+  final calificacionesExamen = [6.1, 7.8, 9.2, 6.5, 8.7, 5.9];
 
-  // reduce — combina todos los elementos en uno
-  final total = ventas.reduce((acum, venta) => acum + venta);
-  print('Total: \$${total.toStringAsFixed(2)}');  // Total: $8630.00
+  // Filtramos los estudiantes que aprobaron el examen (nota mayor o igual a 7.0)
+  final alumnosAprobados = calificacionesExamen.where((nota) => nota >= 7.0);
+  print('\n=== Calificaciones aprobadas (>= 7.0) ===');
+  print(alumnosAprobados.toList()); // [7.8, 9.2, 8.7]
 
-  // fold — como reduce pero con valor inicial (más seguro con listas vacías)
-  final totalFold = ventas.fold(0.0, (acum, venta) => acum + venta);
-  print('Total (fold): \$${totalFold.toStringAsFixed(2)}');
+  // Filtramos los estudiantes que se quedaron supletorios o reprobados (< 7.0)
+  final alumnosReprobados = calificacionesExamen.where((nota) => nota < 7.0);
+  print('=== Calificaciones reprobadas (< 7.0) ===');
+  print(alumnosReprobados.toList());  // [6.1, 6.5, 5.9]
 
-  // Encontrar el máximo
-  final maximo = ventas.reduce((a, b) => a > b ? a : b);
-  print('Mayor venta: \$$maximo');  // Mayor venta: $3100.0
+
+  // =======================================================
+  // === 3. METODOS .reduce() y .fold() (Acumulación)   ===
+  // =======================================================
+  
+  // Lista de ingresos diarios por concepto de inscripciones en la plataforma
+  final ingresosInscripciones = [150.0, 230.0, 98.0, 310.0, 75.0];
+
+  // .reduce() — Combina todos los elementos en un único valor. 
+  // OJO: Lanza error si la lista llega a estar completamente vacía.
+  final totalIngresosReduce = ingresosInscripciones.reduce((acumulador, venta) => acumulador + venta);
+  print('\n=== Métricas de Venta Semanal ===');
+  print('Total ganado (reduce): \$${totalIngresosReduce.toStringAsFixed(2)} USD');
+
+  // .fold() — Más seguro que reduce. Recibe un valor inicial (0.0 en este caso) 
+  // y si la lista está vacía, no rompe la app, simplemente retorna ese valor inicial.
+  final totalIngresosFold = ingresosInscripciones.fold(0.0, (acumulador, venta) => acumulador + venta);
+  print('Total ganado (fold seguro): \$${totalIngresosFold.toStringAsFixed(2)} USD');
+
+  // Encontrar el curso que generó la venta más alta o la matrícula más costosa
+  final mayorIngresoUnico = ingresosInscripciones.reduce((a, b) => a > b ? a : b);
+  print('La matrícula más alta registrada fue de: \$$mayorIngresoUnico USD'); // $310.0
 }
