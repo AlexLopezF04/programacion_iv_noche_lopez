@@ -1,53 +1,64 @@
-
 fun main() {
-    // Val Inmutable
-    val nombre = "Alexander Lopez"
-    val edad: Int = 26
+    // 1. Val (Inmutable): No se puede reasignar una vez inicializado. Aporta seguridad al código.
+    val estudianteNombre = "Alexander Lopez"
+    val estudianteEdad: Int = 26
 
-    // Var mutable
-    var contador = 0
-    contador = contador + 1
+    // 2. Var (Mutable): Puede cambiar su valor a lo largo del ciclo de vida del software.
+    // Ideal para contadores de progreso o visualizaciones.
+    var totalClasesVistas = 0
+    totalClasesVistas = totalClasesVistas + 1
     
-    println("$nombre tiene $edad años")
+    println("🎓 El estudiante $estudianteNombre tiene $estudianteEdad años y ha visto $totalClasesVistas clase(s).")
     
-    // Tipos de datos
-    val numero1: Byte = 127
-    val numero2: Short = 32_767
-    val numero3: Int = 12
-    val numero4: Long = 2_222_222_333_222_333
+    // === 3. TIPOS DE DATOS NUMÉRICOS ENTEROS ===
+    // Kotlin permite usar guiones bajos (_) para mejorar la lectura de números grandes.
+    val limiteInscripcionesPorDia: Byte = 127
+    val totalCursosEnCatalogo: Short = 32_767
+    val idCursoPostgres: Int = 12
+    val visitasGlobalesServidor: Long = 2_222_222_333_222_333L // Se añade 'L' para indicar tipo Long
     
-    println(numero1)
-    println(numero2)
-    println(numero3)
-    println(numero4)
+    println("Límite diario: $limiteInscripcionesPorDia")
+    println("Catálogo disponible: $totalCursosEnCatalogo")
+    println("ID del curso actual: $idCursoPostgres")
+    println("Métrica de tráfico: $visitasGlobalesServidor")
     
-    // Numero decimales
-    val numero5: Float = 3.14f
-    val numero6: Double = 3.14159265
+    // === 4. NÚMEROS DECIMALES ===
+    // Por defecto, un decimal es Double. Si queremos Float, debemos forzar la 'f' al final.
+    val calificacionMinimaAprobacion: Float = 7.0f
+    val precioMembresiaAnual: Double = 149.99359265
     
-    val booleano: Boolean = true
+    val tieneAccesoPremium: Boolean = true
     
-    // Caracteres
-    val caracter: Char = 'k'
-    val cadena: String = "Klotin"
-    val inferido = "string"
+    // === 5. CARACTERES Y CADENAS ===
+    val letraIdentificadorMódulo: Char = 'A' // Comillas simples para caracteres únicos
+    val plataformaNombre: String = "Kotlin Academy" // Comillas dobles para cadenas de texto
     
-    println("Tipo de inferido: ${inferido::class.simpleName}")
+    // Inferencia de tipos: Kotlin deduce automáticamente que es un String sin escribirlo explícitamente
+    val lenguajeDestacadoInferido = "Kotlin para Backend"
+    println("El tipo de dato inferido de la variable es: ${lenguajeDestacadoInferido::class.simpleName}")
     
-    // Utilidades de String
-    // Expresiones
-	val primerNombre="Alexander"
-    val primerApellido="Lopez"
-    val primerNombreMayuscula=primerNombre.uppercase()
-    val primerApellidoMayuscula=primerApellido.uppercase()
+    // === 6. UTILIDADES DE STRING Y EXPRESIONES ===
+    val cursoNombre = "nestjs profesional"
+    val categoriaNombre = "desarrollo de software"
     
-    println("Nombre Completo: ${primerNombreMayuscula} ${primerApellidoMayuscula}")
-    println("Nombre Completo: ${primerNombre.uppercase()} ${primerApellido.uppercase()}")
+    // Transformación usando métodos integrados (.uppercase())
+    val cursoMayuscula = cursoNombre.uppercase()
+    val categoriaMayuscula = categoriaNombre.uppercase()
+    
+    // Imprimiendo variables previamente transformadas
+    println("📚 Curso: $cursoMayuscula | Categoría: $categoriaMayuscula")
+    
+    // Imprimiendo expresiones directamente evaluadas dentro del String Template usando ${ }
+    println("🚀 Lanzamiento: ${cursoNombre.uppercase()} en el área de ${categoriaNombre.uppercase()}")
     
     /*
-     Comentario de varias
-     lineas
-    */
+      ===============================================
+      Comentario de varias líneas:
+      Este bloque simula la base de la declaración de variables
+      y tipos primitivos esenciales para el manejo de metadata
+      en la base de datos de los Cursos Online.
+      ===============================================
+     */
     
-    // Una sola linea
+    // Comentario de una sola línea: Fin del archivo 2 de fundamentos.
 }
