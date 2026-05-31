@@ -1,33 +1,51 @@
-data class Producto1(
-    val id:        Int,
-    val nombre:    String,
-    val precio:    Double,
+// Data Class: Modela la entidad pura que viaja entre PostgreSQL y el Frontend
+data class CursoCatalogo(
+    val id: Int,
+    val nombre: String,
+    val precio: Double,
     val categoria: String,
-    val activo:    Boolean = true
+    val activo: Boolean = true // Parámetro con valor por defecto
 )
 
 fun main() {
-    val p1 = Producto1(1, "Teclado mecánico", 89.99, "Periféricos")
-    val p2 = Producto1(2, "Teclado inalambrico", 89.99, "Periféricos")
-    val p3 = Producto1(3, "Monitor 27\"", 349.99, "Pantallas")
+    println("=== MÓDULO DE MODELADO DE DATOS (DATA CLASSES) ===\n")
 
-    // toString() automático
-    println(p1)  // Producto(id=1, nombre=Teclado mecánico, ...)
+    val curso1 = CursoCatalogo(1, "Kotlin Backend Starter", 89.99, "Programación")
+    val curso2 = CursoCatalogo(2, "Kotlin Backend Avanzado", 89.99, "Programación")
+    val curso3 = CursoCatalogo(3, "Despliegue de Módulos Odoo", 349.99, "Sistemas")
 
-    // equals() por valor
-    println(p1 == p2)   // true
-    println(p1 == p3)   // false
+    // 1. toString() automático y legible generado por el compilador
+    println("--- 📝 1. Representación String Automática ---")
+    println(curso1)  // Imprime de forma humana: CursoCatalogo(id=1, nombre=Kotlin Backend Starter, ...)
 
-    // copy() — nuevo objeto con cambios puntuales
-    val barato   = p1.copy(precio = 59.99)
-    val inactivo = p1.copy(activo = false)
+    // 2. equals() estructural por valor (Compara contenido, no posiciones de memoria)
+    println("\n--- ⚖️ 2. Comparación Estructural (equals / ==) ---")
+    // Dará 'false' porque sus IDs y nombres difieren, a pesar de compartir el mismo precio y categoría
+    println("¿Curso 1 es idéntico a Curso 2?: ${curso1 == curso2}")   // false
+    println("¿Curso 1 es idéntico a Curso 3?: ${curso1 == curso3}")   // false
 
-    // Desestructuración
-    val (id, nombre, precio) = p1
-    println("$id: $nombre — $$precio")
+    // 3. El método .copy() — Inmutabilidad defensiva con modificaciones específicas
+    println("\n--- 🖨️ 3. Clonación con Modificaciones (.copy) ---")
+    // Creamos una variante de oferta modificando únicamente el precio del curso original
+    val cursoEnOferta = curso1.copy(precio = 59.99)
+    // Desactivamos un curso temporalmente manteniendo el resto de sus propiedades intactas
+    val cursoMantenimiento = curso1.copy(activo = false)
 
-    // En bucles
-    listOf(p1, p3).forEach { (id2, nombre2, precio2) ->
-        println("[$id2] $nombre2: $$precio2")
+    println("Curso Original:  $curso1")
+    println("Curso en Oferta: $cursoEnOferta")
+    println("Curso Oculto:    $cursoMantenimiento")
+
+    // 4. Desestructuración posicional (Destructuring Declarations)
+    // Extrae los componentes internos mapeándolos automáticamente a variables individuales
+    println("\n--- 🔓 4. Desestructuración de Objetos ---")
+    val (id, nombre, precio) = curso1
+    println("Variable extraída -> ID: $id | Curso: $nombre — \$${precio} USD")
+
+    // 5. Desestructuración directa en estructuras cíclicas (Bucle lambda forEach)
+    println("\n--- 🔄 5. Desestructuración dentro de Bucles ---")
+    val listaCursos = listOf(curso1, curso3)
+    
+    listaCursos.forEach { (idCurso, nombreCurso, precioCurso) ->
+        println("🛍️ [Catálogo ID: $idCurso] $nombreCurso | Precio Final: \$${precioCurso}")
     }
 }

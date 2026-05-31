@@ -1,20 +1,40 @@
-class Rectangulo(val ancho: Double, val alto: Double) {
-    val area:      Double get() = ancho * alto
-    val perimetro: Double get() = 2 * (ancho + alto)
+class CargaHorariaBootcamp(val horasTeoria: Double, val horasPractica: Double) {
 
-    // Siempre llaman al constructor primario con this(...)
-    constructor(lado: Double) : this(lado, lado)
-    constructor(ancho: Int, alto: Int) : this(ancho.toDouble(), alto.toDouble())
+    // Propiedades calculadas dinámicamente mediante GET personalizado
+    val horasTotales: Double get() = horasTeoria + horasPractica
+    val factorIntensidad: Double get() = 2 * (horasTeoria + horasPractica)
 
-    override fun toString() = "Rectángulo(${ancho}x${alto}) | área=${area}"
+    // =========================================================================
+    // CONSTRUCTORES SECUNDARIOS (Sobrecarga de inicialización)
+    // =========================================================================
+    
+    // Constructor Secundario 1: Si el bootcamp es equilibrado, recibe un solo valor y lo duplica usando this(lado, lado)
+    constructor(horasEquilibradas: Double) : this(horasEquilibradas, horasEquilibradas)
+
+    // Constructor Secundario 2: Si el backend envía números enteros (Int), los convierte a Double de forma transparente
+    constructor(horasTeoriaInt: Int, horasPracticaInt: Int) : this(horasTeoriaInt.toDouble(), horasPracticaInt.toDouble())
+
+    // Sobreescritura del método clásico toString() para formatear la salida en logs de auditoría
+    override fun toString() = "📚 Distribución Bootcamp: (${horasTeoria}h Teoría x ${horasPractica}h Práctica) | Carga Total = ${horasTotales} hrs."
 }
 
+// =========================================================================
+// HILO PRINCIPAL DE EJECUCIÓN (main)
+// =========================================================================
 fun main() {
-    val r1 = Rectangulo(5.0, 3.0)
-    val r2 = Rectangulo(4.0)        // cuadrado
-    val r3 = Rectangulo(6, 2)       // con Int
+    println("=== MÓDULO DE PLANIFICACIÓN ACADÉMICA (CONSTRUCTORES SECUNDARIOS) ===\n")
 
-    println(r1)  // Rectángulo(5.0x3.0) | área=15.0
-    println(r2)  // Rectángulo(4.0x4.0) | área=16.0
-    println(r3)  // Rectángulo(6.0x2.0) | área=12.0
+    // 1. Instanciación usando el Constructor Primario (Double, Double)
+    val rutaBackend = CargaHorariaBootcamp(40.0, 60.0)
+    
+    // 2. Instanciación usando el Constructor Secundario 1 (Un solo Double - Estructura simétrica)
+    val tallerExpreso = CargaHorariaBootcamp(15.0) 
+    
+    // 3. Instanciación usando el Constructor Secundario 2 (Int, Int - Casteo automático interno)
+    val moduloOdoo = CargaHorariaBootcamp(20, 30) 
+
+    // Al imprimir las instancias, Kotlin invoca automáticamente nuestro método 'toString()' sobreescrito
+    println(rutaBackend)
+    println(tallerExpreso)
+    println(moduloOdoo)
 }

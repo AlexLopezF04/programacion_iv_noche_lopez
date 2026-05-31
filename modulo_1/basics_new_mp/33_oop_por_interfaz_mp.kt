@@ -1,58 +1,90 @@
-// La interfaz define el contrato — QUÉ puede hacer
-// Las implementaciones definen el CÓMO
-interface Pagable {
-    fun procesar(monto: Double): Boolean
-    val nombre: String
+// =========================================================================
+// INTERFAZ: Define el contrato arquitectónico de la plataforma
+// =========================================================================
+interface Transaccionable {
+    // Las propiedades en una interfaz pueden ser abstractas (obligando a la clase a proveerlas)
+    val pasarelaNombre: String
+    
+    // Firma del método: No tiene cuerpo {}, solo describe los parámetros y el tipo de retorno
+    fun procesarPago(monto: Double): Boolean
 }
 
-class TarjetaCredito(val numero: String) : Pagable {
-    override val nombre = "Tarjeta de crédito"
-    override fun procesar(monto: Double): Boolean {
-        println("💳 Cargando $${"%.2f".format(monto)} a $numero")
+// =========================================================================
+// IMPLEMENTACIONES CONCRETAS (Definen el "CÓMO")
+// =========================================================================
+
+class TarjetaCreditoEcuador(val numeroMascara: String) : Transaccionable {
+    override val pasarelaNombre = "Tarjeta de Crédito (Datafast / Medianet)"
+    
+    override fun procesarPago(monto: Double): Boolean {
+        println("💳 Transacción Bancaria: Cargando \$${"%.2f".format(monto)} a la cuenta $numeroMascara")
+        return true // Simulación de respuesta exitosa del banco
+    }
+}
+
+class PagoPayPal(val correoEstudiante: String) : Transaccionable {
+    override val pasarelaNombre = "PayPal Internacional"
+    
+    override fun procesarPago(monto: Double): Boolean {
+        println("🅿️ Token de Seguridad: Enviando \$${"%.2f".format(monto)} desde el ID: $correoEstudiante")
         return true
     }
 }
 
-class PayPal(val email: String) : Pagable {
-    override val nombre = "PayPal"
-    override fun procesar(monto: Double): Boolean {
-        println("🅿️ Enviando $${"%.2f".format(monto)} a $email")
+class TransferenciaPichincha(val numeroComprobante: String) : Transaccionable {
+    override val pasarelaNombre = "Transferencia Directa Banco Pichincha"
+    
+    override fun procesarPago(monto: Double): Boolean {
+        println("🏦 Verificación de Fondos: Procesando comprobante #$numeroComprobante por \$${"%.2f".format(monto)}")
         return true
     }
 }
 
-class Efectivo : Pagable {
-    override val nombre = "Efectivo"
-    override fun procesar(monto: Double): Boolean {
-        println("💵 Recibiendo $${"%.2f".format(monto)} en efectivo")
+class PagoEfectivoGAD : Transaccionable {
+    override val pasarelaNombre = "Depósito en Ventanilla Física (GAD)"
+    
+    override fun procesarPago(monto: Double): Boolean {
+        println("💵 Recaudación: Efectivo recibido físicamente en ventanilla por \$${"%.2f".format(monto)}")
         return true
     }
 }
 
-class Cheque : Pagable {
-    override val nombre = "Cheque"
-    override fun procesar(monto: Double): Boolean {
-        println("💵 Recibiendo $${"%.2f".format(monto)} en cheque")
-        return true
+// =========================================================================
+// CONTROLADOR LOGÍSTICO (Polimorfismo Puro)
+// =========================================================================
+
+// Esta función es agnóstica a los detalles de bajo nivel. Cumple el principio Abierto/Cerrado (SOLID)
+fun procesarInscripcionCurso(montoMatricula: Double, pasarela: Transaccionable) {
+    println("\n[SISTEMA DE FACTURACIÓN]: Iniciando pasarela con: ${pasarela.pasarelaNombre}...")
+    
+    // Invocación polimórfica: El método se comporta distinto en tiempo de ejecución según la instancia real
+    val transaccionCompletada = pasarela.procesarPago(montoMatricula)
+    
+    if (transaccionCompletada) {
+        println("✅ Matrícula Exitosa: Acceso al curso concedido inmediatamente.")
+    } else {
+        println("❌ Pago Fallido: Transacción rechazada por el proveedor.")
     }
 }
 
-// Esta función no sabe ni le importa qué tipo de pago es
-// Solo sabe que recibe algo que implementa Pagable — POLIMORFISMO
-fun cobrar(monto: Double, metodoPago: Pagable) {
-    println("Procesando pago con ${metodoPago.nombre}...")
-    val exito = metodoPago.procesar(monto)
-    println(if (exito) "✅ Pago exitoso" else "❌ Pago fallido")
-}
-
+// =========================================================================
+// HILO PRINCIPAL DE EJECUCIÓN (main)
+// =========================================================================
 fun main() {
-    val metodos: List<Pagable> = listOf(
-        TarjetaCredito("**** **** **** 1234"),
-        PayPal("ana@test.com"),
-        Efectivo(),
-        Cheque()
+    println("=== MÓDULO DE RECAUDACIÓN Y MATRÍCULAS (POLIMORFISMO DE INTERFACES) ===")
+
+    // Creamos una lista polimórfica agrupada bajo el tipo de la interfaz común
+    val pasarelasHabilitadas: List<Transaccionable> = listOf(
+        TarjetaCreditoEcuador("**** **** **** 4504"),
+        PagoPayPal("alexander@ecuador.dev"),
+        TransferenciaPichincha("TRX-99821"),
+        PagoEfectivoGAD()
     )
 
-    // Misma función — comportamiento distinto según el tipo
-    metodos.forEach { cobrar(99.99, it) }
+    // Iteración funcional: Mandamos la misma tarifa a diferentes métodos de pago
+    val costoInscripcion = 99.99
+    
+    pasarelasHabilitadas.forEach { metodo -> 
+        procesarInscripcionCurso(costoInscripcion, metodo) 
+    }
 }

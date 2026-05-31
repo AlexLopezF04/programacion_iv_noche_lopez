@@ -1,50 +1,73 @@
-abstract class Figura(val nombre: String) {
-    // abstract — las subclases DEBEN implementar esto (herencia forzada)
-    abstract val area: Double
-    abstract val perimetro: Double
-    abstract fun descripcion(): String
+// =========================================================================
+// SUPERCLASE ABSTRACTA: Define la plantilla y lógica común reutilizable
+// =========================================================================
+abstract class NotificacionCanal(val canalNombre: String) {
+    
+    // Propiedades y métodos abstractos: Las subclases DEBEN darles un comportamiento real (Herencia obligatoria)
+    abstract val tarifaEnvioCreditos: Double
+    abstract fun generarContenidoFormateado(): String
 
-    // concreto — disponible en todas las subclases (reutilización)
-    fun comparar(otra: Figura): String = when {
-        area > otra.area -> "$nombre es más grande que ${otra.nombre}"
-        area < otra.area -> "$nombre es más pequeña que ${otra.nombre}"
-        else             -> "$nombre y ${otra.nombre} tienen la misma área"
+    // Método concreto (Implementado): Disponible inmediatamente para todos los hijos por igual
+    fun compararCostoInversion(otraNotificacion: NotificacionCanal): String {
+        return when {
+            tarifaEnvioCreditos > otraNotificacion.tarifaEnvioCreditos -> 
+                "⚠️ [$canalNombre] consume más créditos de infraestructura que [${otraNotificacion.canalNombre}]."
+            tarifaEnvioCreditos < otraNotificacion.tarifaEnvioCreditos -> 
+                "⚡ [$canalNombre] es económicamente más eficiente que [${otraNotificacion.canalNombre}]."
+            else -> 
+                "💼 Ambos canales ([$canalNombre] y [${otraNotificacion.canalNombre}]) tienen la misma tarifa de consumo."
+        }
     }
 
-    // Polimorfismo: toString usa area y descripcion que son polimórficas
-    override fun toString() = "${descripcion()} | Área: ${"%.2f".format(area)}"
+    // Polimorfismo en acción: El método toString() nativo utiliza propiedades que se computarán en el hijo
+    override fun toString(): String {
+        return "📡 Canal: $canalNombre | Tarifa: $tarifaEnvioCreditos XP | Vista Previa: '${generarContenidoFormateado()}'"
+    }
 }
 
-class Circulo(val radio: Double) : Figura("Círculo") {
-    override val area:       Double get() = Math.PI * radio * radio
-    override val perimetro:  Double get() = 2 * Math.PI * radio
-    override fun descripcion() = "Círculo de radio $radio"
+// =========================================================================
+// SUBCLASES CONCRETAS: Implementan el comportamiento obligatorio
+// =========================================================================
+
+class NotificacionPush(val tokenDispositivo: String, val alertaTexto: String) : NotificacionCanal("Firebase Push Notification") {
+    // Implementación usando getters calculados dinámicos
+    override val tarifaEnvioCreditos: Double get() = 0.05 // Tarifa baja por consumo de sockets internos
+    override fun generarContenidoFormateado() = "📱 PUSH -> $alertaTexto"
 }
 
-class Rectangulo(val ancho: Double, val alto: Double) : Figura("Rectángulo") {
-    override val area:       Double get() = ancho * alto
-    override val perimetro:  Double get() = 2 * (ancho + alto)
-    override fun descripcion() = "Rectángulo de ${ancho}x${alto}"
+class NotificacionEmail(val correoDestino: String, val asunto: String) : NotificacionCanal("SMTP Email Server") {
+    override val tarifaEnvioCreditos: Double get() = 0.25 // Mayor costo por verificación de entregabilidad
+    override fun generarContenidoFormateado() = "📧 EMAIL [$asunto] -> Enviado a $correoDestino"
 }
 
-class TrianguloEquilatero(val lado: Double) : Figura("Triángulo") {
-    override val area:       Double get() = (Math.sqrt(3.0) / 4) * lado * lado
-    override val perimetro:  Double get() = 3 * lado
-    override fun descripcion() = "Triángulo equilátero de lado $lado"
+class NotificacionSMS(val numeroCelular: String, val mensajeCorto: String) : NotificacionCanal("Twilio SMS Gateway") {
+    // Cálculo matemático simulado: La tarifa varía según la longitud del mensaje SMS
+    override val tarifaEnvioCreditos: Double get() = if (mensajeCorto.length > 160) 0.80 else 0.40
+    override fun generarContenidoFormateado() = "💬 SMS -> $mensajeCorto"
 }
 
+// =========================================================================
+// HILO PRINCIPAL DE EJECUCIÓN (main)
+// =========================================================================
 fun main() {
-    // POLIMORFISMO: la lista acepta cualquier Figura
-    val figuras: List<Figura> = listOf(
-        Circulo(5.0),
-        Rectangulo(4.0, 6.0),
-        TrianguloEquilatero(8.0)
+    println("=== MÓDULO CORE: MICROSERVICIO DE NOTIFICACIONES (CLASES ABSTRACTAS) ===\n")
+
+    // POLIMORFISMO TOTAL: La lista se tipa con la clase abstracta superior, pero almacena instancias reales de los hijos
+    val bandejaSalida: List<NotificacionCanal> = listOf(
+        NotificacionPush("tok_4504_dev", "¡Tu reto de Kotlin ha sido aprobado!"),
+        NotificacionEmail("alexander@ecuador.dev", "Confirmación de Matrícula - Modulo Odoo 18"),
+        NotificacionSMS("+593999999999", "Alerta: Tu entorno Sandbox de Azure expirará en 24 horas.")
     )
 
-    figuras.forEach { println(it) }  // toString polimórfico
+    // Iteración limpia: Se ejecuta el toString() sobreescrito de la clase abstracta
+    bandejaSalida.forEach { notificacion -> println(notificacion) }
 
-    val mayor = figuras.maxByOrNull { it.area }
-    println("\nFigura más grande: ${mayor?.nombre}")
+    // Uso de operadores funcionales avanzados sobre la jerarquía abstracta
+    println("\n--- Análisis de Métricas de Infraestructura ---")
+    val canalMasCostoso = bandejaSalida.maxByOrNull { it.tarifaEnvioCreditos }
+    println("🚨 Canal que requiere mayor presupuesto técnico: ${canalMasCostoso?.canalNombre}")
 
-    println(figuras[0].comparar(figuras[1]))
+    // Prueba del método concreto compartido por herencia pura
+    println("\n--- Comparador de Costos en Caliente ---")
+    println(bandejaSalida[0].compararCostoInversion(bandejaSalida[1]))
 }

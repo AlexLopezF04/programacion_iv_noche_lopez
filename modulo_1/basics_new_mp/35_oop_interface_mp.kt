@@ -1,52 +1,98 @@
-interface Serializable {
-    val id: String                    // abstracta — debe implementarse
-    fun serializar(): String          // abstracta — debe implementarse
-    val version: Int get() = 1        // con default — puede sobreescribirse
+// =========================================================================
+// INTERFACES: Contratos de Habilidades (Capabilities)
+// =========================================================================
+
+interface Exportable {
+    val idUnico: String
+    
+    fun exportarAFormatoPlano(): String
+    
+    // Propiedad calculada con implementación por defecto (Default Getter)
+    val versionEsquema: Int get() = 1 
 }
 
-interface Validable {
-    val errores: List<String>
-    val esValido: Boolean get() = errores.isEmpty()
+interface Inspeccionable {
+    // Lista inmutable que cada clase concreta definirá cómo llenar
+    val registroErrores: List<String>
+    
+    // Lógica por defecto basada en el estado de la propiedad abstracta
+    val esEstructuraValida: Boolean get() = registroErrores.isEmpty()
 
-    fun validar(): Boolean
-    fun imprimirErrores() {                // implementación por defecto
-        if (errores.isEmpty()) println("Sin errores")
-        else errores.forEach { println("  ❌ $it") }
+    fun ejecutarValidacion(): Boolean
+    
+    // Método por defecto con cuerpo lógico incorporado (Default Method)
+    fun desplegarDiagnostico() {
+        if (esEstructuraValida) {
+            println("✅ Diagnóstico Core: Parámetros íntegros. Objeto listo para persistencia.")
+        } else {
+            println("⚠️ Diagnóstico Core: Se detectaron fallos estructurales:")
+            registroErrores.forEach { error -> println("   ❌ $error") }
+        }
     }
 }
 
-// POLIMORFISMO: Pedido puede usarse donde se espere Serializable O Validable
-data class Pedido(
-    override val id: String,
-    val cliente:     String,
-    val items:       List<String>,
-    val total:       Double
-) : Serializable, Validable {
+// =========================================================================
+// DATA CLASS CON HERENCIA MÚLTIPLE (Polimorfismo por Composición)
+// =========================================================================
+data class InscripcionCurso(
+    override val idUnico: String,
+    val estudianteId: String,
+    val codigoMóduloOdoo: String,
+    val inversionXP: Double
+) : Exportable, Inspeccionable {
 
-    override fun serializar() =
-        "$id|$cliente|${items.joinToString(",")}|$total"
+    // 1. Cumplimiento del contrato 'Exportable' (Formateo CSV/Plano para logs)
+    override fun exportarAFormatoPlano() = 
+        "$idUnico|$estudianteId|$codigoMóduloOdoo|${"%.2f".format(inversionXP)}"
 
-    override val errores: List<String> get() = buildList {
-        if (cliente.isBlank()) add("El cliente no puede estar vacío")
-        if (items.isEmpty())   add("El pedido debe tener al menos un item")
-        if (total <= 0)        add("El total debe ser mayor que cero")
-    }
+    // 2. Cumplimiento del contrato 'Inspeccionable' usando buildList (DSL de Kotlin)
+    override val registroErrores: List<String>
+        get() = buildList {
+            if (estudianteId.isBlank()) add("El identificador del estudiante no puede estar vacío.")
+            if (codigoMóduloOdoo.isBlank()) add("La referencia del módulo Odoo de Pichincha es obligatoria.")
+            if (inversionXP < 0) add("La inversión de créditos académicos (XP) no puede ser un valor negativo.")
+        }
 
-    override fun validar() = esValido
+    override fun ejecutarValidacion(): Boolean = esEstructuraValida
 }
 
+// =========================================================================
+// HILO PRINCIPAL DE EJECUCIÓN (main)
+// =========================================================================
 fun main() {
-    val pedido1 = Pedido("P001", "Ana", listOf("Teclado", "Mouse"), 119.98)
-    val pedido2 = Pedido("P002", "",    emptyList(),                -5.0)
+    println("=== MÓDULO DE ADMISIÓN: HERENCIA MÚLTIPLE POR CONTRATOS ===\n")
 
-    // Polimorfismo por interfaz
-    fun procesarSerializable(s: Serializable) = println("→ ${s.serializar()}")
-    fun procesarValidable(v: Validable) {
-        println("Válido: ${v.esValido}")
-        v.imprimirErrores()
+    // Instancia A: Caso ideal (Datos correctos)
+    val inscripcionOk = InscripcionCurso("INS-001", "AlexLopezF04", "ODOO-18-EPS", 45.0)
+    
+    // Instancia B: Caso crítico (Forzando múltiples fallas para validar robustez)
+    val inscripcionCorrupta = InscripcionCurso("INS-002", "", "", -15.5)
+
+    // =========================================================================
+    // POLIMORFISMO POR INTERFAZ EN FUNCIONES LOCALES
+    // =========================================================================
+    
+    // Esta función solo exige que el objeto sea Exportable
+    fun procesarCapaSerializacion(entidad: Exportable) {
+        println("📡 [Streaming Engine] -> Enviando payload plano: ${entidad.exportarAFormatoPlano()}")
     }
 
-    procesarSerializable(pedido1)   // → P001|Ana|Teclado,Mouse|119.98
-    procesarValidable(pedido1)      // Válido: true / Sin errores
-    procesarValidable(pedido2)      // Válido: false / ❌ ...
+    // Esta función solo exige que el objeto sea Inspeccionable
+    fun procesarCapaValidacion(entidad: Inspeccionable) {
+        println("🛡️ [Security Gateway] -> Evaluando reglas de dominio...")
+        println("¿Estructura aprobada?: ${entidad.esEstructuraValida}")
+        entidad.desplegarDiagnostico() // Invoca el método con comportamiento por defecto
+    }
+
+    // --- Flujo de Procesamiento para Inscripción Exitosa ---
+    println("--- 📂 Procesando Registro 1 (Exitoso) ---")
+    procesarCapaSerializacion(inscripcionOk)
+    procesarCapaValidacion(inscripcionOk)
+
+    println("\n--------------------------------------------------\n")
+
+    // --- Flujo de Procesamiento para Inscripción Corrupta ---
+    println("--- 📂 Procesando Registro 2 (Rechazado) ---")
+    procesarCapaSerializacion(inscripcionCorrupta)
+    procesarCapaValidacion(inscripcionCorrupta)
 }
