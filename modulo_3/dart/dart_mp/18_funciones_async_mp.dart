@@ -1,7 +1,7 @@
 import 'dart:io';
 
 // async → la función ahora retorna un Future<String> que se resolverá en el futuro
-Future<String> verificarEstadoSuscripción(String estudianteId) async {
+Future<String> verificarEstadoSuscripcion(String estudianteId) async {
   print("📡 [API] Conectando con el servidor de pasarela de pagos...");
   
   // await suspende temporalmente la ejecución de esta función hasta que el Future termine
@@ -16,7 +16,7 @@ void main() async {
   print('🚀 [App] Iniciando validación de acceso para el usuario...');
   
   // La ejecución de main espera pacientemente aquí sin congelar la interfaz de usuario
-  final estadoPlan = await verificarEstadoSuscripción('USR-9942');
+  final estadoPlan = await verificarEstadoSuscripcion('USR-9942');
   
   print('🔒 [App] Nivel de acceso del alumno: $estadoPlan');
   print('✅ [App] Contenido multimedia desbloqueado con éxito.');

@@ -50,6 +50,7 @@ void main() {
 
   // Ejecución de comportamientos especializados y únicos de cada objeto
   certIndividual.compartirEnLinkedIn();
-  certEspecializado.customAction(); // En tu estructura original: gato.trepar() -> aquí descargarHistorialProyectos()
+  
+  // SE ELIMINÓ LA LÍNEA DEL ERROR (customAction)
   certEspecializado.descargarHistorialProyectos();
 }
