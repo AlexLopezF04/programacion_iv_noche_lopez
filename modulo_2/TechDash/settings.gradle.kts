@@ -24,3 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "TechDash"
 include(":app")
+ 

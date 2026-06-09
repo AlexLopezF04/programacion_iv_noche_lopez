@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.ute.techdash.ui.theme.TechDashTheme
 
-class MainActivity : ComponentActivity() {
+class MainActivityCicloVidaResume : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

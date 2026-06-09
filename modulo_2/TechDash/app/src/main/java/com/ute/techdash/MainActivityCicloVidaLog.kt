@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.ute.techdash.ui.theme.TechDashTheme
 
-class MainActivity : ComponentActivity() {
+class MainActivityCicloVidaLog : ComponentActivity() {
 
     private val TAG = "CicloVida"
 
