@@ -7,7 +7,7 @@ void main() {
   var activo = true;            // bool
 
   // Tipo explícito
-  String apellido = 'García';
+  String apellido = 'García'; 
   int    stock    = 100;
   double pi       = 3.14159;
   bool   visible  = false;
