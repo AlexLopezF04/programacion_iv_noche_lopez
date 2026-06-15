@@ -1,0 +1,85 @@
+// data/repository/UserRepositoryImpl.kt
+package com.shopapp.data.repository
+
+import com.shopapp.data.remote.api.UserApi
+import com.shopapp.data.remote.dto.NotificationResultDto
+import com.shopapp.data.remote.dto.SendNotificationDto
+import com.shopapp.data.remote.dto.toDomain
+import com.shopapp.data.remote.dto.toRequest
+import com.shopapp.domain.model.NotificationResult
+import com.shopapp.domain.model.User
+import com.shopapp.domain.model.UserPayload
+import com.shopapp.domain.model.UserStats
+import com.shopapp.domain.repository.UserRepository
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@Singleton
+class UserRepositoryImpl @Inject constructor(
+    private val api: UserApi,
+) : UserRepository {
+
+    override suspend fun getUsers(
+        search:   String?,
+        isStaff:  Boolean?,
+        isActive: Boolean?,
+        page:     Int?,
+    ): Result<Pair<List<User>, Int>> = runCatching {
+        val response = api.getUsers(search, isStaff, isActive, page)
+        if (response.isSuccessful) {
+            val body = response.body()!!
+            Pair(body.results.map { it.toDomain() }, body.count)
+        } else error("Error ${response.code()}")
+    }
+
+    override suspend fun getUser(id: Int): Result<User> = runCatching {
+        val response = api.getUser(id)
+        if (response.isSuccessful) response.body()!!.toDomain()
+        else error("Error ${response.code()}")
+    }
+
+    override suspend fun createUser(payload: UserPayload): Result<User> = runCatching {
+        val response = api.createUser(payload.toRequest())
+        if (response.isSuccessful) response.body()!!.toDomain()
+        else error("Error ${response.code()}: ${response.errorBody()?.string()}")
+    }
+
+    override suspend fun updateUser(id: Int, payload: UserPayload): Result<User> = runCatching {
+        val response = api.updateUser(id, payload.toRequest())
+        if (response.isSuccessful) response.body()!!.toDomain()
+        else error("Error ${response.code()}: ${response.errorBody()?.string()}")
+    }
+
+    override suspend fun deleteUser(id: Int): Result<Unit> = runCatching {
+        val response = api.deleteUser(id)
+        if (!response.isSuccessful) error("Error ${response.code()}")
+    }
+
+    override suspend fun toggleActive(id: Int): Result<Boolean> = runCatching {
+        val response = api.toggleActive(id)
+        if (response.isSuccessful) response.body()!!.isActive
+        else error("Error ${response.code()}")
+    }
+
+    override suspend fun sendNotification(
+        subject: String,
+        message: String,
+        userId: Int?,
+    ): Result<NotificationResult> = runCatching {
+        val response = api.sendNotification(SendNotificationDto(subject, message, userId))
+        if (response.isSuccessful) {
+            val dto = response.body() ?: error("Respuesta vacía del servidor")
+            NotificationResult(dto.detail, dto.sent, dto.failed)
+        } else {
+            error(response.errorBody()?.string() ?: "Error ${response.code()}")
+        }
+    }
+
+    override suspend fun getStats(): Result<UserStats> = runCatching {
+        val response = api.getStats()
+        if (response.isSuccessful) {
+            val s = response.body()!!
+            UserStats(total = s.total, active = s.active, inactive = s.inactive, staff = s.staff)
+        } else error("Error ${response.code()}")
+    }
+}
