@@ -43,6 +43,12 @@ class AuthViewModel @Inject constructor(
 
     init {
         restoreSession()
+        // Si el interceptor limpia la sesión (token expirado), forzar logout
+        viewModelScope.launch {
+            tokenDataStore.sessionCleared.collect {
+                _currentUser.value = null
+            }
+        }
     }
 
     // Restaurar sesión desde DataStore al arrancar la app

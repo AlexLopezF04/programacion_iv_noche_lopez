@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -27,6 +28,9 @@ class TokenDataStore @Inject constructor(
         val KEY_EMAIL    = stringPreferencesKey("email")
         val KEY_IS_STAFF = booleanPreferencesKey("is_staff")
     }
+
+    // Evento cuando la sesión se borra (token expirado sin refresh)
+    val sessionCleared = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
 
     // ── Reads ─────────────────────────────────────────────────
 
@@ -68,6 +72,7 @@ class TokenDataStore @Inject constructor(
 
     suspend fun clearSession() {
         context.dataStore.edit { it.clear() }
+        sessionCleared.tryEmit(Unit)
     }
 
     // ── User snapshot ─────────────────────────────────────────
