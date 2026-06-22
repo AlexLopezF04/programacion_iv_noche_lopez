@@ -46,7 +46,7 @@ class _ContadorLimitadoState extends State<ContadorLimitado> {
         LinearProgressIndicator(
           value:           progreso,
           color:           enLimite ? Colors.red : widget.color,   // ← widget.color
-          backgroundColor: widget.color.withOpacity(0.15),
+          backgroundColor: widget.color.withValues(alpha: 0.15),
         ),
 
         const SizedBox(height: 4),

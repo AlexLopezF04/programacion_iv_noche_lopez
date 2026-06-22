@@ -19,12 +19,12 @@ class Etiqueta extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color:        color.withOpacity(relleno ? 0.3 : 0.12),
+        color:        color.withValues(alpha: relleno ? 0.3 : 0.12),
         border:       Border.all(color: color, width: 1.5),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color:      color.withOpacity(0.2),
+            color:      color.withValues(alpha: 0.2),
             blurRadius: 6,
             offset:     const Offset(0, 2),
           ),

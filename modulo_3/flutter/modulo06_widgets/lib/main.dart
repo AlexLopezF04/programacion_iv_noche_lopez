@@ -4,6 +4,9 @@ import 'widgets/catalogo_basicos.dart';
 import 'widgets/etiqueta.dart';
 import 'widgets/servicio_estado.dart';
 import 'widgets/contador_limitado.dart';
+import 'widgets/reloj.dart';
+import 'widgets/indicador.dart';
+import 'screens/pantalla_contexto.dart';
 // ┌──────────────────────────────────────────────────────────────────┐
 // │  Cambia este número y guarda (Ctrl+S) para navegar entre pasos. │
 // │  1  Paso 1   StatelessWidget mínimo                             │
@@ -19,6 +22,10 @@ const int paso = 5;
 
 void main() => runApp(MaterialApp(
   debugShowCheckedModeBanner: false,
+  theme: ThemeData(
+    colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+    useMaterial3: true,
+  ),
   home: switch (paso) {
     1 => const Scaffold(body: Center(child: Saludo())),
     2 => const CatalogoBasicos(),
@@ -63,7 +70,31 @@ void main() => runApp(MaterialApp(
         ),
       ),
     ),
-    _ => Scaffold(body: Center(child: Text('Paso $paso: crea el widget primero'))),
+    6 => Scaffold(                                     // Paso 4 — Reloj
+      appBar: AppBar(title: const Text('Cronómetro')),
+      body: const Center(child: Reloj()),
+    ),
+    7 => const PantallaContexto(),                    // Paso 5 — BuildContext
+    8 => Scaffold(                                     // Paso 6 — Composición
+      body: Center(
+        child: Wrap(
+          spacing: 32, runSpacing: 24,
+          alignment: WrapAlignment.center,
+          children: const [
+            Indicador(label: 'Servidores activos', valor: '8',
+                      color: Colors.green, icono: Icons.dns),
+            Indicador(label: 'Alertas críticas',   valor: '2',
+                      color: Colors.red,   icono: Icons.warning_amber,
+                      subtitulo: 'Requieren atención'),
+            Indicador(label: 'Tráfico',            valor: '4.2 GB',
+                      color: Colors.indigo),
+            Indicador(label: 'Uptime',             valor: '99.8%',
+                      color: Colors.teal, subtitulo: 'Últimos 30 días'),
+          ],
+        ),
+      ),
+    ),
+    _ => Scaffold(body: Center(child: Text('Paso $paso no definido'))),
   },
 ));
 
