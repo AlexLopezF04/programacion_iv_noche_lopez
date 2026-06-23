@@ -6,7 +6,7 @@ import 'widgets/servicio_estado.dart';
 import 'widgets/contador_limitado.dart';
 import 'widgets/reloj.dart';
 import 'widgets/indicador.dart';
-import 'screens/pantalla_contexto.dart';
+import 'widgets/pantalla_contexto.dart';
 // ┌──────────────────────────────────────────────────────────────────┐
 // │  Cambia este número y guarda (Ctrl+S) para navegar entre pasos. │
 // │  1  Paso 1   StatelessWidget mínimo                             │
