@@ -18,16 +18,6 @@ class FilaEstado extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Row(
         children: [
-          // Indicador superior izquierdo
-          Text(
-            'SVC',
-            style: TextStyle(
-              fontSize: 8,
-              color: activo ? Colors.green : Colors.red,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(width: 12),
           // Ícono de estado
           Icon(
             activo ? Icons.check_circle : Icons.cancel,

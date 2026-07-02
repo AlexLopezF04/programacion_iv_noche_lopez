@@ -32,51 +32,36 @@ class TarjetaLog extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         border:       Border(left: BorderSide(color: _colorNivel, width: 3)),
       ),
-      child: Stack(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize:       MainAxisSize.min,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize:       MainAxisSize.min,
+          // Fila superior: nivel + componente + hora
+          Row(
             children: [
-              // Fila superior: nivel + componente + hora
-              Row(
-                children: [
-                  Container(
-                    padding:    const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: _colorNivel, borderRadius: BorderRadius.circular(4)),
-                    child: Text(nivel,
-                        style: const TextStyle(
-                            color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(componente,
-                      style: TextStyle(
-                          fontSize: 12, color: Colors.grey.shade700, fontWeight: FontWeight.w600)),
-                  const Spacer(),
-                  Text(
-                    '${timestamp.hour.toString().padLeft(2, '0')}:'
-                    '${timestamp.minute.toString().padLeft(2, '0')}:'
-                    '${timestamp.second.toString().padLeft(2, '0')}',
-                    style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
-                  ),
-                ],
+              Container(
+                padding:    const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: _colorNivel, borderRadius: BorderRadius.circular(4)),
+                child: Text(nivel,
+                    style: const TextStyle(
+                        color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
               ),
-              const SizedBox(height: 6),
-              Text(mensaje, style: TextStyle(fontSize: 13, color: Colors.grey.shade800)),
+              const SizedBox(width: 8),
+              Text(componente,
+                  style: TextStyle(
+                      fontSize: 12, color: Colors.grey.shade700, fontWeight: FontWeight.w600)),
+              const Spacer(),
+              Text(
+                '${timestamp.hour.toString().padLeft(2, '0')}:'
+                '${timestamp.minute.toString().padLeft(2, '0')}:'
+                '${timestamp.second.toString().padLeft(2, '0')}',
+                style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
+              ),
             ],
           ),
-          Positioned(
-            top: 0, left: 0,
-            child: Text(
-              'LOG',
-              style: TextStyle(
-                fontSize: 8,
-                color: _colorNivel,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
+          const SizedBox(height: 6),
+          Text(mensaje, style: TextStyle(fontSize: 13, color: Colors.grey.shade800)),
         ],
       ),
     );

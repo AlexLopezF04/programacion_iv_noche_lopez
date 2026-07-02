@@ -17,18 +17,6 @@ class AvatarBadge extends StatelessWidget {
     return Stack(
       clipBehavior: Clip.none,   // permite que el badge salga del Stack
       children: [
-        // Indicador superior izquierdo
-        Positioned(
-          top: 0, left: 0,
-          child: Text(
-            'AV',
-            style: TextStyle(
-              fontSize: 8,
-              color: activo ? Colors.green : Colors.red,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
         // Avatar — capa inferior
         Container(
           width:  56,

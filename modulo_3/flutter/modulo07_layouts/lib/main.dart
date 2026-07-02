@@ -12,7 +12,7 @@ import 'widgets/avatar_badge.dart';
 // │  4  Paso 4  Stack + Positioned — AvatarBadge                   │
 // │  5  Paso 5  SizedBox, Padding, Align, Wrap                      │
 // └──────────────────────────────────────────────────────────────────┘
-const int paso = 5;
+const int paso = 1;
 
 void main() => runApp(MaterialApp(
   debugShowCheckedModeBanner: false,
@@ -104,7 +104,7 @@ void main() => runApp(MaterialApp(
         ],
       ),
     ),
-    _ => Scaffold(body: Center(child: Text('Paso $paso: crea el widget primero'))),
+    _ => Scaffold(body: Center(child: Text('Paso $paso no definido'))),
   },
 ));
 
@@ -127,24 +127,8 @@ Widget _paso1() => Scaffold(
           ),
         ],
       ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          const Text('Servidor web-01',
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          Positioned(
-            top: 0, left: 0,
-            child: Text(
-              'NODO',
-              style: TextStyle(
-                fontSize: 8,
-                color: Colors.indigo,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      ),
+      child: const Text('Servidor web-01',
+          style: TextStyle(fontWeight: FontWeight.bold)),
     ),
   ),
 );
