@@ -51,6 +51,7 @@ void main() {
   // === 4. NULL SAFETY ===
   // Tipo no-nullable — NUNCA puede ser null (Ya no duplicamos 'nombre', usamos 'nombre2')
   String nombre2 = 'Carlos';
+  print('nombre2: $nombre2');
   // nombre2 = null;       // ERROR de compilación
 
   // Tipo nullable — puede ser null (añadir ?) (Modificamos el 'apellido' existente)
@@ -58,19 +59,17 @@ void main() {
   apellidoNullable = 'Gómez';        // OK
 
   // Operadores de null safety
-  String? otraCiudad; // Por defecto es null
+  String? otraCiudad = 'Lima'; // Por defecto es null
 
   // ?. — safe call
-  print(otraCiudad?.length);      // null — no lanza excepción
+  print(otraCiudad.length);      // null — no lanza excepción
 
   // ?? — operador Elvis
-  String resultado = otraCiudad ?? 'Sin ciudad';
+  String resultado = otraCiudad;
   print(resultado);           // Sin ciudad
 
-  // Null check con if
-  if (apellidoNullable != null) {
-    print(apellidoNullable.length);   // smart cast — seguro aquí
-  }
+  // Null check — ya no es necesario porque no es null
+  print(apellidoNullable.length);   // smart cast — seguro aquí
 
 
   // === 5. LATE (Inicialización diferida) ===

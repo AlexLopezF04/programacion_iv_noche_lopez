@@ -16,10 +16,9 @@ void main() {
   print(estado);
 
   // null-aware con ternario
-  String? ciudad;
-  String display = 'Sin ciudad';
+  String? ciudad = 'Madrid';
 
   // Forma más concisa con ??
-  String display2 = ciudad?.toUpperCase() ?? 'Sin ciudad';
+  String display2 = ciudad.toUpperCase();
   print(display2);  // Sin ciudad
 }
