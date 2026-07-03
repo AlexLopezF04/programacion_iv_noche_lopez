@@ -12,7 +12,7 @@ void main() {
   double pi       = 3.14159;
   bool   visible  = false;
 
-  print('$nombre $apellido tiene $edad años. Stock: $stock, Activo: $activo');
+  print('$nombre $apellido tiene $edad años. Precio: 2${precio}, Stock: $stock, Activo: $activo, Pi: $pi, Visible: $visible');
 
 
   // === 2. FINAL VS CONST ===
@@ -28,13 +28,14 @@ void main() {
   final ahora  = DateTime.now();   // OK — se evalúa en runtime
   // const ahora = DateTime.now(); // ERROR 
 
-  print('Gravedad: $gravedad, Pi2: $pi2, Hora actual: $ahora');
+  print('Gravedad: $gravedad, Pi2: $pi2, Ciudad: $ciudad, Hora actual: $ahora');
 
 
   // === 3. MUTABILIDAD ===
   // var — mutable, tipo inferido
   var contador = 0;
   contador = 1;          // OK — Ahora está dentro de main
+  print('Contador: $contador');
 
   // final — inmutable referencia, evaluado en runtime
   final lista = [1, 2, 3];
@@ -43,6 +44,7 @@ void main() {
 
   // const — inmutable profundo, evaluado en compilación
   const colores = ['rojo', 'azul'];
+  print('Colores: $colores');
   // colores.add('verde'); // ERROR en runtime — lista const es completamente inmutable
 
 
