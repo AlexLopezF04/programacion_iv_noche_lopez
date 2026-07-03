@@ -1,121 +1,364 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'providers/metricas_provider.dart';
+import 'providers/servidores_provider.dart';
+import 'screens/pantalla_dashboard.dart';
+import 'screens/pantalla_metricas.dart';
+import 'screens/pantalla_servidores.dart';
+
+/// ---------- SELECCIONADOR DE PASOS ----------
+/// Paso 1: Provider simple (valor inmutable)
+/// Paso 2: NotifierProvider + CRUD
+/// Paso 3: StateProvider + Provider derivado (filtro)
+/// Paso 4: AsyncNotifierProvider (carga asíncrona)
+/// Paso 5: StateProvider + NavigationBar
+
+final contadorProvider = Provider<int>((ref) => 42);
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      title: 'Riverpod - Selector',
+      theme: ThemeData(colorSchemeSeed: Colors.indigo, useMaterial3: true),
+      home: const HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _HomePageState extends State<HomePage> {
+  int _paso = 1;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  static const _titulos = {
+    1: 'Paso 1: Provider simple',
+    2: 'Paso 2: NotifierProvider',
+    3: 'Paso 3: StateProvider + Provider derivado',
+    4: 'Paso 4: AsyncNotifierProvider',
+    5: 'Paso 5: NavigationBar con Riverpod',
+  };
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
+        title: Text(_titulos[_paso]!),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: .center,
+      body: _pasoWidget(),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+            if (_paso > 1)
+              TextButton.icon(
+                icon: const Icon(Icons.arrow_back),
+                label: const Text('Anterior'),
+                onPressed: () => setState(() => _paso--),
+              )
+            else
+              const SizedBox(),
+            Text('$_paso / 5'),
+            if (_paso < 5)
+              TextButton.icon(
+                icon: const Icon(Icons.arrow_forward),
+                label: const Text('Siguiente'),
+                onPressed: () => setState(() => _paso++),
+              )
+            else
+              const SizedBox(),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+    );
+  }
+
+  Widget _pasoWidget() {
+    switch (_paso) {
+      case 1:
+        return const _Paso1();
+      case 2:
+        return const _Paso2();
+      case 3:
+        return const _Paso3();
+      case 4:
+        return const _Paso4();
+      case 5:
+        return const _Paso5();
+      default:
+        return const Center(child: Text('Paso no válido'));
+    }
+  }
+}
+
+/// Paso 1: Provider simple — valor leído sin modificarlo
+class _Paso1 extends ConsumerWidget {
+  const _Paso1();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final contador = ref.watch(contadorProvider);
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Provider<int>',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            '$contador',
+            style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Valor inmutable — no se puede modificar',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Paso 2: NotifierProvider — CRUD de servidores
+class _Paso2 extends ConsumerWidget {
+  const _Paso2();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final servidores = ref.watch(servidoresProvider);
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: Text(
+            '${servidores.length} servidor(es)',
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: servidores.length,
+            itemBuilder: (context, index) {
+              final s = servidores[index];
+              return ListTile(
+                title: Text(s.nombre),
+                subtitle: Text('${s.host}:${s.puerto}'),
+                leading: IconButton(
+                  icon: Icon(
+                    s.esFavorito ? Icons.star : Icons.star_border,
+                    color: s.esFavorito ? Colors.amber : null,
+                  ),
+                  onPressed: () {
+                    ref
+                        .read(servidoresProvider.notifier)
+                        .toggleFavorito(s.id);
+                  },
+                ),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.red),
+                  onPressed: () {
+                    ref.read(servidoresProvider.notifier).eliminar(s.id);
+                  },
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Paso 3: StateProvider + Provider derivado — búsqueda en vivo
+class _Paso3 extends ConsumerWidget {
+  const _Paso3();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final filtrados = ref.watch(servidoresFiltradosProvider);
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: TextField(
+            decoration: const InputDecoration(
+              labelText: 'Buscar servidor',
+              prefixIcon: Icon(Icons.search),
+              border: OutlineInputBorder(),
+            ),
+            onChanged: (valor) {
+              ref.read(busquedaProvider.notifier).cambiar(valor);
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            'Filtrados: ${filtrados.length} de ${ref.watch(servidoresProvider).length}',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: filtrados.length,
+            itemBuilder: (context, index) {
+              final s = filtrados[index];
+              return ListTile(
+                title: Text(s.nombre),
+                subtitle: Text(s.host),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Paso 4: AsyncNotifierProvider — carga asíncrona con loading / error / data
+class _Paso4 extends ConsumerWidget {
+  const _Paso4();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final metricasAsync = ref.watch(metricasProvider);
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: Row(
+            children: [
+              const Text('Métricas de servidores'),
+              const Spacer(),
+              TextButton.icon(
+                icon: const Icon(Icons.refresh),
+                label: const Text('Refrescar'),
+                onPressed: () {
+                  ref.read(metricasProvider.notifier).refrescar();
+                },
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: metricasAsync.when(
+            loading: () =>
+                const Center(child: CircularProgressIndicator()),
+            error: (error, stack) =>
+                Center(child: Text('Error: $error')),
+            data: (metricas) => ListView.builder(
+              itemCount: metricas.length,
+              itemBuilder: (context, index) {
+                final m = metricas[index];
+                return Card(
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: 16, vertical: 4),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Servidor ${m.servidorId}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall),
+                        const SizedBox(height: 4),
+                        _FilaStat('CPU', m.cpu, Colors.blue),
+                        _FilaStat('RAM', m.ram, Colors.green),
+                        _FilaStat('Disco', m.disco, Colors.orange),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _FilaStat extends StatelessWidget {
+  final String label;
+  final double valor;
+  final Color color;
+
+  const _FilaStat(this.label, this.valor, this.color);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        children: [
+          SizedBox(width: 50, child: Text(label)),
+          Expanded(
+            child: LinearProgressIndicator(
+              value: valor / 100,
+              minHeight: 10,
+              color: color,
+              backgroundColor: color.withValues(alpha: 0.1),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Text('${valor.toStringAsFixed(0)}%'),
+        ],
+      ),
+    );
+  }
+}
+
+/// Paso 5: StateProvider + NavigationBar
+class _Paso5 extends ConsumerWidget {
+  const _Paso5();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final indice = ref.watch(indiceTabProvider);
+
+    return Scaffold(
+      body: indice == 0
+          ? const PantallaServidores()
+          : const PantallaMetricas(),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: indice,
+        onDestinationSelected: (i) {
+          ref.read(indiceTabProvider.notifier).cambiar(i);
+        },
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.dns_outlined),
+            selectedIcon: Icon(Icons.dns),
+            label: 'Servidores',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.bar_chart_outlined),
+            selectedIcon: Icon(Icons.bar_chart),
+            label: 'Métricas',
+          ),
+        ],
       ),
     );
   }
