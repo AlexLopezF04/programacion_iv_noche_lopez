@@ -1,12 +1,13 @@
-// lib/router/app_router.dart
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../screens/pantalla_inicio.dart';
 import '../screens/pantalla_servidores.dart';
+import '../screens/pantalla_no_encontrada.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/',
-  debugLogDiagnostics: true,  // imprime cada navegación en la consola
+  debugLogDiagnostics: true,
+  errorBuilder: (context, state) =>
+      PantallaNoEncontrada(ruta: state.matchedLocation),
   routes: [
     GoRoute(
       path:    '/',
