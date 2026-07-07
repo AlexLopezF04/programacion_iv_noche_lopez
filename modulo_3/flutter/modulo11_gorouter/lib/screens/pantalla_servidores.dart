@@ -1,6 +1,6 @@
-// lib/screens/pantalla_servidores.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../models/servidor_ssh.dart';
 
 class PantallaServidores extends StatelessWidget {
   const PantallaServidores({super.key});
@@ -8,7 +8,6 @@ class PantallaServidores extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    final servidores = ['prod-web-01', 'prod-db-01', 'staging-api'];
 
     return Scaffold(
       appBar: AppBar(
@@ -17,16 +16,19 @@ class PantallaServidores extends StatelessWidget {
         foregroundColor: cs.onPrimaryContainer,
       ),
       body: ListView.builder(
-        itemCount:   servidores.length,
-        itemBuilder: (context, i) => ListTile(
-          leading: const Icon(Icons.dns),
-          title:   Text(servidores[i]),
-          onTap: () {
-            // context.push() — apila la pantalla (aparece botón "atrás")
-            context.push('/servidores/${servidores[i]}',
-            extra: servidores[i]);
-          },
-        ),
+        itemCount:   servidoresSimulados.length,
+        itemBuilder: (context, i) {
+          final s = servidoresSimulados[i];
+          return ListTile(
+            leading: Icon(Icons.dns, color: s.ssl ? Colors.green : Colors.grey),
+            title:   Text(s.nombre),
+            subtitle: Text('${s.ip}:${s.puerto}'),
+            onTap: () => context.push(
+              '/servidores/${s.id}',
+              extra: s,
+            ),
+          );
+        },
       ),
     );
   }
