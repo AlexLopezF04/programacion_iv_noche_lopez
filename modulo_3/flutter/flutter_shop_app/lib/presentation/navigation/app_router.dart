@@ -12,34 +12,19 @@ import '../screens/catalog/product_detail_screen.dart';
 import '../screens/cart/cart_screen.dart';
 import '../screens/orders/orders_screen.dart';
 import '../screens/orders/order_detail_screen.dart';
+import '../screens/admin/dashboard_screen.dart';
+import '../widgets/admin_shell.dart';
 import 'public_shell.dart';
 
-class _PlaceholderScreen extends ConsumerWidget {
+class _AdminPlaceholder extends StatelessWidget {
   final String title;
-  const _PlaceholderScreen(this.title);
+  const _AdminPlaceholder(this.title);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        actions: [
-          IconButton(
-            tooltip: 'Cerrar sesión',
-            icon: const Icon(Icons.logout),
-            onPressed: () async {
-              await ref.read(authProvider.notifier).logout();
-              if (!context.mounted) return;
-              context.go('/login');
-            },
-          ),
-        ],
-      ),
-      body: Center(
-        child: Text(title, style: const TextStyle(color: Color(0xFF8888AA), fontSize: 16)),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Center(
+    child: Text(title,
+        style: const TextStyle(color: Color(0xFF8888AA), fontSize: 16)),
+  );
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -94,12 +79,54 @@ final routerProvider = Provider<GoRouter>((ref) {
         ],
       ),
 
-      GoRoute(path: '/admin',              builder: (_, __) => const _PlaceholderScreen('Dashboard — M8')),
-      GoRoute(path: '/admin/categories',   builder: (_, __) => const _PlaceholderScreen('Categorías — M9')),
-      GoRoute(path: '/admin/products',     builder: (_, __) => const _PlaceholderScreen('Productos — M10')),
-      GoRoute(path: '/admin/orders',       builder: (_, __) => const _PlaceholderScreen('Pedidos admin — M11')),
-      GoRoute(path: '/admin/orders/:id',   builder: (_, s) => _PlaceholderScreen('Pedido admin #${s.pathParameters['id']} — M11')),
-      GoRoute(path: '/admin/users',        builder: (_, __) => const _PlaceholderScreen('Usuarios — M12')),
+      GoRoute(
+        path: '/admin',
+        builder: (_, state) => AdminShell(
+          title:        'Dashboard',
+          currentRoute: state.matchedLocation,
+          child:        const DashboardScreen(),
+        ),
+      ),
+      GoRoute(
+        path: '/admin/categories',
+        builder: (_, state) => AdminShell(
+          title:        'Categorías',
+          currentRoute: state.matchedLocation,
+          child:        const _AdminPlaceholder('Categorías — M8'),
+        ),
+      ),
+      GoRoute(
+        path: '/admin/products',
+        builder: (_, state) => AdminShell(
+          title:        'Productos',
+          currentRoute: state.matchedLocation,
+          child:        const _AdminPlaceholder('Productos — M9'),
+        ),
+      ),
+      GoRoute(
+        path: '/admin/orders',
+        builder: (_, state) => AdminShell(
+          title:        'Pedidos',
+          currentRoute: state.matchedLocation,
+          child:        const _AdminPlaceholder('Pedidos admin — M10'),
+        ),
+      ),
+      GoRoute(
+        path: '/admin/orders/:id',
+        builder: (_, state) => AdminShell(
+          title:        'Detalle pedido',
+          currentRoute: '/admin/orders',
+          child:        _AdminPlaceholder('Pedido #${state.pathParameters['id']} — M10'),
+        ),
+      ),
+      GoRoute(
+        path: '/admin/users',
+        builder: (_, state) => AdminShell(
+          title:        'Usuarios',
+          currentRoute: state.matchedLocation,
+          child:        const _AdminPlaceholder('Usuarios — M11'),
+        ),
+      ),
     ],
   );
 });
