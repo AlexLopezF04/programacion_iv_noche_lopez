@@ -1,213 +1,198 @@
-// lib/main.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/config/app_config.dart';
-import 'theme/app_theme.dart';
+import 'core/config/app_theme.dart';
 import 'theme/app_colors.dart';
+import 'domain/repository/category_repository_impl.dart';
+import 'domain/model/category.dart';
+import 'domain/notifier/auth_notifier.dart';
+import 'core/router/app_router.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: '.env');
-  runApp(
-    const ProviderScope(
-      child: FlutterShopApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: FlutterShopApp()));
 }
 
-class FlutterShopApp extends StatelessWidget {
+class FlutterShopApp extends ConsumerStatefulWidget {
   const FlutterShopApp({super.key});
 
   @override
+  ConsumerState<FlutterShopApp> createState() => _FlutterShopAppState();
+}
+
+class _FlutterShopAppState extends ConsumerState<FlutterShopApp> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(
+        () => ref.read(authNotifierProvider.notifier).checkSession());
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title:        AppConfig.appName,
+    final router = ref.watch(routerProvider);
+    return MaterialApp.router(
+      title: AppConfig.appName,
       debugShowCheckedModeBanner: false,
-      theme:        AppTheme.dark,
-      home:         const VerificationScreen(),
+      theme: AppTheme.dark,
+      routerConfig: router,
     );
   }
 }
 
-// ── Pantalla de verificación ──────────────────────────────────
+// Provider de verificación (Módulo 2)
+final _categoriesVerifyProvider = FutureProvider<List<Category>>((ref) {
+  return ref.watch(categoryRepositoryProvider).getCategories();
+});
 
-class VerificationScreen extends StatelessWidget {
+class VerificationScreen extends ConsumerWidget {
   const VerificationScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final categoriesAsync = ref.watch(_categoriesVerifyProvider);
     final tt = Theme.of(context).textTheme;
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Verificación'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 40),
-
-              // Logo
+              const SizedBox(height: 16),
               Center(
                 child: Column(
                   children: [
-                    Text(
-                      AppConfig.appName,
-                      style: tt.displayMedium?.copyWith(color: AppColors.accent),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Módulo 1 · Flutter + Material 3',
-                      style: tt.bodyMedium,
-                    ),
+                    Text(AppConfig.appName,
+                        style: tt.displayMedium
+                            ?.copyWith(color: AppColors.accent)),
+                    const SizedBox(height: 6),
+                    Text('Módulo 2 · Conexión real con Django',
+                        style: tt.bodyMedium),
                   ],
                 ),
               ),
-              const SizedBox(height: 40),
-
-              // Card de entorno
+              const SizedBox(height: 32),
               Container(
-                width:  double.infinity,
-                padding: const EdgeInsets.all(20),
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color:        AppColors.surface,
+                  color: AppColors.surface,
                   borderRadius: BorderRadius.circular(16),
-                  border:       Border.all(color: AppColors.border),
+                  border: Border.all(color: AppColors.border),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'ESTADO DEL ENTORNO',
-                      style: tt.labelSmall?.copyWith(
-                        letterSpacing: 1.2,
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    ...[
-                      ('Flutter',     '3.x'),
-                      ('Dart',        '3.x'),
-                      ('Riverpod',    '2.x'),
-                      ('GoRouter',    '14.x'),
-                      ('Dio',         '5.x'),
-                      ('API URL',     AppConfig.baseUrl),
-                    ].map((item) => _EnvRow(label: item.$1, value: item.$2)),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-
-              // Paleta de colores
-              Text(
-                'DESIGN SYSTEM',
-                style: tt.labelSmall?.copyWith(
-                  letterSpacing: 1.2,
-                  color: AppColors.textSecondary,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  ('Accent',  AppColors.accent),
-                  ('Success', AppColors.success),
-                  ('Warning', AppColors.warning),
-                  ('Error',   AppColors.error),
-                  ('Info',    AppColors.info),
-                ].map((item) => Expanded(
-                  child: Column(
+                child: categoriesAsync.when(
+                  loading: () => const Row(
                     children: [
-                      Container(
-                        height:       44,
-                        margin:       const EdgeInsets.symmetric(horizontal: 4),
-                        decoration:   BoxDecoration(
-                          color:        item.$2,
-                          borderRadius: BorderRadius.circular(8),
+                      SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: AppColors.accent,
                         ),
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        item.$1,
-                        style: const TextStyle(fontSize: 9, color: AppColors.textFaint),
-                        textAlign: TextAlign.center,
+                      SizedBox(width: 12),
+                      Text('Conectando con Django...',
+                          style:
+                              TextStyle(color: AppColors.textSecondary)),
+                    ],
+                  ),
+                  error: (err, _) => Row(
+                    children: [
+                      const Text('❌ ', style: TextStyle(fontSize: 20)),
+                      Expanded(
+                        child: Text(
+                          err.toString(),
+                          style: const TextStyle(
+                              color: AppColors.error, fontSize: 12),
+                        ),
                       ),
                     ],
                   ),
-                )).toList(),
-              ),
-              const SizedBox(height: 24),
-
-              // Modelos de dominio
-              Text(
-                'MODELOS DE DOMINIO',
-                style: tt.labelSmall?.copyWith(
-                  letterSpacing: 1.2,
-                  color: AppColors.textSecondary,
+                  data: (cats) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '✅ ${cats.length} categorías del backend',
+                        style: const TextStyle(
+                          color: AppColors.success,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      ...cats.take(3).map((c) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(c.name,
+                                style: const TextStyle(
+                                    color: AppColors.textPrimary,
+                                    fontSize: 13)),
+                            Text(
+                              '${c.totalProducts} prod.',
+                              style: const TextStyle(
+                                  color: AppColors.accent,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      )),
+                    ],
+                  ),
                 ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'CAPA DE DATOS',
+                style: tt.labelSmall?.copyWith(
+                    letterSpacing: 1.2, color: AppColors.textSecondary),
               ),
               const SizedBox(height: 12),
               ...[
-                'auth_models.dart',
-                'category.dart',
-                'product.dart',
-                'order.dart',
-                'user.dart',
+                'data/local/secure_storage.dart',
+                'data/remote/api/dio_client.dart',
+                'core/error/api_exception.dart',
+                'data/remote/api/category_remote_datasource.dart',
+                'data/remote/api/product_remote_datasource.dart',
+                'data/remote/api/order_remote_datasource.dart',
+                'data/remote/api/user_remote_datasource.dart',
               ].map((f) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
+                padding: const EdgeInsets.symmetric(vertical: 3),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'domain/model/$f',
-                      style: const TextStyle(
-                        color:      AppColors.accent,
-                        fontSize:   11,
-                        fontFamily: 'monospace',
+                    Expanded(
+                      child: Text(
+                        'lib/$f',
+                        style: const TextStyle(
+                            color: AppColors.accent,
+                            fontSize: 11,
+                            fontFamily: 'monospace'),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    const Text(
-                      '✓',
-                      style: TextStyle(color: AppColors.success, fontWeight: FontWeight.bold),
-                    ),
+                    const Text('✓',
+                        style: TextStyle(
+                            color: AppColors.success,
+                            fontWeight: FontWeight.bold)),
                   ],
                 ),
               )),
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _EnvRow extends StatelessWidget {
-  final String label;
-  final String value;
-  const _EnvRow({required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label, style: const TextStyle(color: AppColors.textSecondary, fontSize: 13)),
-          const SizedBox(width: 12),
-          Flexible(
-            child: Text(
-              value,
-              textAlign: TextAlign.end,
-              style: const TextStyle(
-                color:      AppColors.textPrimary,
-                fontWeight: FontWeight.w600,
-                fontSize:   13,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
