@@ -112,17 +112,27 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, state) => AdminShell(
           title:        'Pedidos',
           currentRoute: state.matchedLocation,
+<<<<<<< HEAD
           child:        const OrdersAdminScreen(),
+=======
+          child:        const _AdminPlaceholder('Pedidos admin — M10'),
+>>>>>>> a8eecc4db20d327156917c58078ceefeae3eb8c9
         ),
       ),
       GoRoute(
         path: '/admin/orders/:id',
         builder: (_, state) => AdminShell(
+<<<<<<< HEAD
           title:        'Detalle pedido #${state.pathParameters['id']}',
           currentRoute: '/admin/orders',
           child:        OrderAdminDetailScreen(
             orderId: int.parse(state.pathParameters['id']!),
           ),
+=======
+          title:        'Detalle pedido',
+          currentRoute: '/admin/orders',
+          child:        _AdminPlaceholder('Pedido #${state.pathParameters['id']} — M10'),
+>>>>>>> a8eecc4db20d327156917c58078ceefeae3eb8c9
         ),
       ),
       GoRoute(
