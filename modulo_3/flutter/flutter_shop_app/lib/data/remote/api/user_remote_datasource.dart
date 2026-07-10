@@ -28,6 +28,7 @@ abstract class UserRemoteDatasource {
   Future<void>                 deleteUser(int id);
   Future<bool>                 toggleActive(int id);
   Future<Map<String, dynamic>> getStats();
+  Future<void>                 sendNotification(String subject, String message, int? userId);
 }
 
 class UserRemoteDatasourceImpl implements UserRemoteDatasource {
@@ -83,6 +84,22 @@ class UserRemoteDatasourceImpl implements UserRemoteDatasource {
     try {
       final res = await _dio.post('/users/$id/toggle-active/');
       return res.data['is_active'] as bool;
+    } on DioException catch (e) {
+      throw ApiException.fromDioError(e);
+    }
+  }
+
+  @override
+  Future<void> sendNotification(String subject, String message, int? userId) async {
+    try {
+      await _dio.post(
+        '/users/send-notification/',
+        data: {
+          'subject': subject,
+          'message': message,
+          if (userId != null) 'user_id': userId,
+        },
+      );
     } on DioException catch (e) {
       throw ApiException.fromDioError(e);
     }

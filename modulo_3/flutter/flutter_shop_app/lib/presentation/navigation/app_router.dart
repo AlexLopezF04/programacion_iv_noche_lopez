@@ -6,6 +6,9 @@ import '../providers/auth_provider.dart';
 import '../screens/auth/login_screen.dart';
 import '../screens/auth/register_screen.dart';
 import '../screens/auth/profile_screen.dart';
+import '../screens/auth/forgot_password_screen.dart';
+import '../screens/auth/reset_password_confirm_screen.dart';
+import '../screens/admin/send_notification_screen.dart';
 import '../screens/catalog/catalog_screen.dart';
 import '../screens/catalog/home_screen.dart';
 import '../screens/catalog/product_detail_screen.dart';
@@ -31,17 +34,30 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       if (auth.isChecking) return null;
 
-      final isAuthRoute = location == '/login' || location == '/register';
+      final isAuthRoute = location == '/login' ||
+          location == '/register' ||
+          location == '/forgot-password' ||
+          location.startsWith('/reset-password');
 
       if (!auth.isAuthenticated && !isAuthRoute) return '/login';
       if ( auth.isAuthenticated &&  isAuthRoute) return auth.isStaff ? '/admin' : '/';
       if ( auth.isAuthenticated && !auth.isStaff && location.startsWith('/admin')) return '/';
+      if ( auth.isAuthenticated && !auth.isStaff && location == '/send-notification') return '/';
 
       return null;
     },
     routes: [
-      GoRoute(path: '/login',    builder: (_, __) => const LoginScreen()),
-      GoRoute(path: '/register', builder: (_, __) => const RegisterScreen()),
+      GoRoute(path: '/login',          builder: (_, __) => const LoginScreen()),
+      GoRoute(path: '/register',       builder: (_, __) => const RegisterScreen()),
+      GoRoute(path: '/forgot-password', builder: (_, __) => const ForgotPasswordScreen()),
+      GoRoute(
+        path: '/reset-password/:uid/:token',
+        builder: (_, s) => ResetPasswordConfirmScreen(
+          uid:   s.pathParameters['uid']!,
+          token: s.pathParameters['token']!,
+        ),
+      ),
+      GoRoute(path: '/send-notification', builder: (_, __) => const SendNotificationScreen()),
 
       ShellRoute(
         builder: (_, __, child) => PublicShell(child: child),
