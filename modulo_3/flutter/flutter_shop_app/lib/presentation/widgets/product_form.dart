@@ -4,7 +4,9 @@ import '../../theme/app_colors.dart';
 import '../../core/utils/validators.dart';
 import '../../domain/model/category.dart';
 import '../../domain/model/product.dart';
+import '../providers/image_upload_provider.dart';
 import '../providers/products_admin_provider.dart';
+import './product_image.dart';
 
 Future<void> showProductForm(
   BuildContext context,
@@ -20,9 +22,7 @@ Future<void> showProductForm(
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
-    builder: (_) => ProviderScope(
-      child: ProductFormSheet(initial: initial, categories: categories),
-    ),
+    builder: (_) => ProductFormSheet(initial: initial, categories: categories),
   );
 }
 
@@ -43,6 +43,7 @@ class _ProductFormSheetState extends ConsumerState<ProductFormSheet> {
   final _stockCtrl = TextEditingController();
   bool     _isActive   = true;
   int?     _categoryId;
+  String?  _currentImageUrl;
 
   @override
   void initState() {
@@ -55,6 +56,7 @@ class _ProductFormSheetState extends ConsumerState<ProductFormSheet> {
       _stockCtrl.text = p.stock.toString();
       _isActive       = p.isActive;
       _categoryId     = p.category?.id;
+      _currentImageUrl = p.imageUrl;
     }
   }
 
@@ -91,6 +93,13 @@ class _ProductFormSheetState extends ConsumerState<ProductFormSheet> {
     final isSaving = formSt is ProductFormSaving;
     final isEdit   = widget.initial != null;
 
+    ref.listen<ImageUploadState>(imageUploadProvider, (_, next) {
+      if (next is ImageUploadSuccess && next.imageUrl != null) {
+        setState(() => _currentImageUrl = next.imageUrl);
+      }
+    });
+    final isUploadingImage = ref.watch(imageUploadProvider) is ImageUploadLoading;
+
     if (formSt is ProductFormSuccess) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) Navigator.pop(context);
@@ -123,7 +132,78 @@ class _ProductFormSheetState extends ConsumerState<ProductFormSheet> {
                 color: AppColors.textPrimary, fontSize: 20, fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
+
+            if (isEdit)
+              GestureDetector(
+                onTap: isUploadingImage
+                    ? null
+                    : () => ref.read(imageUploadProvider.notifier)
+                        .pickAndUploadProductImage(widget.initial!.id),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: SizedBox(
+                    height: 160,
+                    width:  double.infinity,
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        ProductImage(
+                          imageUrl:     _currentImageUrl,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        if (isUploadingImage)
+                          const ColoredBox(
+                            color: Colors.black45,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        else
+                          Container(
+                            color: Colors.black38,
+                            child: const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.photo_camera_outlined,
+                                    color: Colors.white, size: 32),
+                                SizedBox(height: 6),
+                                Text('Cambiar imagen',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600)),
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            else
+              Container(
+                height:      100,
+                decoration: BoxDecoration(
+                  color:        AppColors.surface2,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppColors.border),
+                ),
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.image_outlined,
+                        color: AppColors.textFaint, size: 32),
+                    SizedBox(height: 6),
+                    Text('La imagen se puede añadir\ntras crear el producto.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: AppColors.textSecondary, fontSize: 12)),
+                  ],
+                ),
+              ),
+            const SizedBox(height: 16),
 
             if (formSt is ProductFormError) ...[
               Container(

@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../theme/app_colors.dart';
@@ -7,7 +6,9 @@ import '../../../domain/repository/category_repository_impl.dart';
 import '../../../domain/model/category.dart';
 import '../../../domain/model/product.dart';
 import '../../providers/products_admin_provider.dart';
+import '../../providers/image_upload_provider.dart';
 import '../../widgets/product_form.dart';
+import '../../widgets/product_image.dart';
 import '../../widgets/restock_dialog.dart';
 
 class ProductsAdminScreen extends ConsumerStatefulWidget {
@@ -19,6 +20,7 @@ class ProductsAdminScreen extends ConsumerStatefulWidget {
 
 class _ProductsAdminScreenState extends ConsumerState<ProductsAdminScreen> {
   List<Category> _categories = [];
+  int? _uploadingProductId;
 
   @override
   void initState() {
@@ -30,8 +32,27 @@ class _ProductsAdminScreenState extends ConsumerState<ProductsAdminScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final state    = ref.watch(productsAdminProvider);
-    final filtered = state.filtered;
+    final state      = ref.watch(productsAdminProvider);
+    final filtered   = state.filtered;
+    final uploadState = ref.watch(imageUploadProvider);
+
+    ref.listen<ImageUploadState>(imageUploadProvider, (_, next) {
+      if (next is ImageUploadSuccess) {
+        setState(() => _uploadingProductId = null);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Imagen del producto actualizada.')),
+        );
+        ref.read(productsAdminProvider.notifier).load();
+        ref.read(imageUploadProvider.notifier).reset();
+      } else if (next is ImageUploadError) {
+        setState(() => _uploadingProductId = null);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(next.message), backgroundColor: AppColors.error),
+        );
+        ref.read(imageUploadProvider.notifier).reset();
+      }
+    });
 
     return Column(
       children: [
@@ -133,7 +154,7 @@ class _ProductsAdminScreenState extends ConsumerState<ProductsAdminScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('\u{1F4E6}', style: TextStyle(fontSize: 48)),
+                    Text('📦', style: TextStyle(fontSize: 48)),
                     SizedBox(height: 12),
                     Text('Sin productos',
                         style: TextStyle(
@@ -149,7 +170,14 @@ class _ProductsAdminScreenState extends ConsumerState<ProductsAdminScreen> {
               itemCount:       filtered.length,
               separatorBuilder:(_, __) => const SizedBox(height: 10),
               itemBuilder: (_, i) => _ProductAdminCard(
-                product:    filtered[i],
+                product:          filtered[i],
+                isUploadingImage: uploadState is ImageUploadLoading &&
+                    _uploadingProductId == filtered[i].id,
+                onUploadImage:    () {
+                  setState(() => _uploadingProductId = filtered[i].id);
+                  ref.read(imageUploadProvider.notifier)
+                      .pickAndUploadProductImage(filtered[i].id);
+                },
                 onToggle:   () => ref.read(productsAdminProvider.notifier)
                     .toggleActive(filtered[i].id, !filtered[i].isActive),
                 onEdit:     () => showProductForm(
@@ -165,8 +193,8 @@ class _ProductsAdminScreenState extends ConsumerState<ProductsAdminScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
                           newStock != null
-                              ? '\u{2705} Stock actualizado: $newStock unidades'
-                              : '\u{274C} Error al actualizar el stock',
+                              ? '✅ Stock actualizado: $newStock unidades'
+                              : '❌ Error al actualizar el stock',
                         ),
                         backgroundColor:
                             newStock != null ? AppColors.success : AppColors.error,
@@ -218,6 +246,8 @@ class _ProductAdminCard extends StatelessWidget {
   final VoidCallback onEdit;
   final VoidCallback onRestock;
   final VoidCallback onDelete;
+  final bool         isUploadingImage;
+  final GestureTapCallback? onUploadImage;
 
   const _ProductAdminCard({
     required this.product,
@@ -225,6 +255,8 @@ class _ProductAdminCard extends StatelessWidget {
     required this.onEdit,
     required this.onRestock,
     required this.onDelete,
+    required this.isUploadingImage,
+    this.onUploadImage,
   });
 
   Color _stockColor() {
@@ -249,21 +281,43 @@ class _ProductAdminCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             child: SizedBox(
               width: 54, height: 54,
-              child: product.imageUrl != null
-                  ? CachedNetworkImage(
-                      imageUrl: product.imageUrl!,
-                      fit:      BoxFit.cover,
-                      errorWidget: (_, __, ___) => Container(
-                        color: AppColors.surface2,
-                        child: const Center(child: Text('\u{1F4E6}')),
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  ProductImage(
+                    imageUrl:     product.imageUrl,
+                    width:        54,
+                    height:       54,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  if (isUploadingImage)
+                    const ColoredBox(
+                      color: Colors.black38,
+                      child: Center(
+                        child: SizedBox(
+                          width: 20, height: 20,
+                          child: CircularProgressIndicator(
+                              strokeWidth: 2, color: Colors.white),
+                        ),
                       ),
                     )
-                  : Container(
-                      color: AppColors.surface2,
-                      child: const Center(
-                        child: Text('\u{1F4E6}', style: TextStyle(fontSize: 22)),
+                  else
+                    Positioned(
+                      bottom: 2, right: 2,
+                      child: GestureDetector(
+                        onTap: onUploadImage,
+                        child: Container(
+                          padding: const EdgeInsets.all(3),
+                          decoration: const BoxDecoration(
+                            color: AppColors.accent, shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.photo_camera,
+                              size: 10, color: Colors.white),
+                        ),
                       ),
                     ),
+                ],
+              ),
             ),
           ),
           const SizedBox(width: 12),
