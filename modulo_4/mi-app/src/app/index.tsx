@@ -2,12 +2,14 @@
 import { Text, View } from 'react-native'
 import { Paso1 } from './Paso1'
 import { Paso2 } from './Paso2'
+import { Paso3 } from './Paso3'
 
 
 // ┌──────────────────────────────────────────────────────────────────┐
 // │  Cambia este número y guarda (Ctrl+S) para navegar entre pasos. │
 // │  1  Paso 1  Texto y vistas básicas                               │
 // │  2  Paso 2  Imágenes y botones                                   │
+// │  3  Paso 3  Tarjeta de perfil                                    │
 // └──────────────────────────────────────────────────────────────────┘
 const PASO: number = 2
 
