@@ -12,7 +12,7 @@ class PantallaMetricas extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title:           const Text('Metricas'),
+        title:           const Text('Métricas Académicas'),
         backgroundColor: cs.primaryContainer,
         foregroundColor: cs.onPrimaryContainer,
       ),
@@ -38,15 +38,15 @@ class PantallaMetricas extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(children: [
-                          _Medidor('CPU', m.cpu, Colors.blue, cs),
+                          _Medidor('Progreso', m.cpu, Colors.indigo, cs, '%'),
                           const SizedBox(width: 12),
-                          _Medidor('RAM', m.ram, Colors.green, cs),
+                          _Medidor('Estudio', m.ram, Colors.green, cs, ' h'),
                           const SizedBox(width: 12),
-                          _Medidor('Disco', m.disco, Colors.orange, cs),
+                          _Medidor('Evaluación', m.disco, Colors.orange, cs, '%'),
                         ]),
                         const SizedBox(height: 8),
-                        Text('Conexiones activas: ${m.conexionesActivas}'),
-                        Text('Ultimo ping: ${m.ultimoPing}'),
+                        Text('Lecciones completadas: ${m.conexionesActivas}'),
+                        Text('Último acceso: ${m.ultimoPing}'),
                       ],
                     ),
                     loading: () => const LinearProgressIndicator(),
@@ -67,22 +67,23 @@ class _Medidor extends StatelessWidget {
   final double  valor;
   final Color   color;
   final ColorScheme cs;
+  final String sufijo;
 
-  const _Medidor(this.label, this.valor, this.color, this.cs);
+  const _Medidor(this.label, this.valor, this.color, this.cs, this.sufijo);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(label, style: const TextStyle(fontSize: 11)),
+        Text(label, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
         const SizedBox(height: 4),
         SizedBox(
-          width: 60, height: 60,
+          width: 70, height: 70,
           child: Stack(
             alignment: Alignment.center,
             children: [
               SizedBox(
-                width: 60, height: 60,
+                width: 70, height: 70,
                 child: CircularProgressIndicator(
                   value:         valor / 100,
                   strokeWidth:   6,
@@ -90,7 +91,7 @@ class _Medidor extends StatelessWidget {
                   valueColor:    AlwaysStoppedAnimation(color),
                 ),
               ),
-              Text('${valor.toStringAsFixed(0)}%',
+              Text('${valor.toStringAsFixed(0)}$sufijo',
                   style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
             ],
           ),

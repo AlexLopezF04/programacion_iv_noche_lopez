@@ -12,10 +12,10 @@ class PantallaServidores extends StatefulWidget {
 
 class _PantallaServidoresState extends State<PantallaServidores> {
   final _servidores = [
-    ServidorSSH(id:'1', nombre:'prod-web-01',  ip:'10.0.2.10',   puerto:22,   usuario:'deploy',   so:'Ubuntu 24.04', ssl:true,  favorito:true),
-    ServidorSSH(id:'2', nombre:'prod-db-01',   ip:'10.0.2.20',   puerto:22,   usuario:'postgres', so:'Debian 12',    ssl:true),
-    ServidorSSH(id:'3', nombre:'staging-api',  ip:'10.0.3.10',   puerto:2222, usuario:'ubuntu',   so:'Ubuntu 24.04', ssl:false),
-    ServidorSSH(id:'4', nombre:'dev-sandbox',  ip:'192.168.1.5', puerto:22,   usuario:'vagrant',  so:'Alpine Linux', ssl:false),
+    ServidorSSH(id:'1', nombre:'Desarrollo Flutter y Dart', ip:'Alex López',   puerto:45,   usuario:'Móviles',   so:'Avanzado', ssl:true,  favorito:true),
+    ServidorSSH(id:'2', nombre:'Bases de Datos Relacionales', ip:'Ing. Gómez',   puerto:20,   usuario:'Databases', so:'Intermedio',    ssl:true),
+    ServidorSSH(id:'3', nombre:'Backend Node.js & Express', ip:'Lic. Ruiz',   puerto:35,   usuario:'Backend',   so:'Avanzado', ssl:false),
+    ServidorSSH(id:'4', nombre:'Maquetación Web CSS & HTML', ip:'Profe Diaz', puerto:18,   usuario:'Frontend',  so:'Principiante', ssl:false),
   ];
 
   bool _modoGrid = false;
@@ -31,7 +31,7 @@ class _PantallaServidoresState extends State<PantallaServidores> {
 
     return Scaffold(
       appBar: AppBar(
-        title:           Text('Servidores (${_servidores.length})'),
+        title:           Text('Cursos Disponibles (${_servidores.length})'),
         backgroundColor: cs.primaryContainer,
         foregroundColor: cs.onPrimaryContainer,
         actions: [

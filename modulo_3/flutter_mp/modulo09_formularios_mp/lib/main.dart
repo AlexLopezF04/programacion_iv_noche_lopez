@@ -9,18 +9,18 @@ import 'screens/pantalla_busqueda.dart';
 // ┌──────────────────────────────────────────────────────────────────┐
 // │  Cambia este número y guarda (Ctrl+S) para navegar entre pasos. │
 // │  1  Paso 1  TextField + TextEditingController + FocusNode       │
-// │  2  Paso 2  Form + TextFormField + validación                   │
-// │  3  Paso 3  Modelo + ListView.builder + ListTile acciones       │
-// │  4  Paso 4  GridView.builder + toggle lista/grid                │
-// │  5  Paso 5  SearchBar + filtrado en tiempo real                 │
+// │  2  Paso 2  Form + TextFormField + validación (Nuevo Curso)     │
+// │  3  Paso 3  Modelo + ListView.builder + ListTile (Lista)         │
+// │  4  Paso 4  GridView.builder + toggle lista/grid (Catálogo)      │
+// │  5  Paso 5  SearchBar + filtrado en tiempo real (Búsqueda)       │
 // └──────────────────────────────────────────────────────────────────┘
-const int paso = 1;
+const int paso = 5;
 
 void main() => runApp(MaterialApp(
   debugShowCheckedModeBanner: false,
   theme: ThemeData(
     colorScheme: ColorScheme.fromSeed(
-      seedColor: const Color(0xFF1B5E20),
+      seedColor: Colors.indigo,
     ),
     useMaterial3: true,
   ),
@@ -44,7 +44,7 @@ class _Paso1 extends StatefulWidget {
 class _Paso1State extends State<_Paso1> {
   final _ctrlHostname = TextEditingController();
   final _ctrlIp       = TextEditingController();
-  final _ctrlPuerto   = TextEditingController(text: '22');
+  final _ctrlPuerto   = TextEditingController(text: '12');
   final _focusIp      = FocusNode();
   final _focusPuerto  = FocusNode();
 
@@ -64,7 +64,7 @@ class _Paso1State extends State<_Paso1> {
 
     return Scaffold(
       appBar: AppBar(
-        title:           const Text('Conexión SSH'),
+        title:           const Text('Registrar Curso (Básico)'),
         backgroundColor: cs.primaryContainer,
         foregroundColor: cs.onPrimaryContainer,
       ),
@@ -76,9 +76,9 @@ class _Paso1State extends State<_Paso1> {
             TextField(
               controller:      _ctrlHostname,
               decoration:      const InputDecoration(
-                labelText:  'Hostname',
-                hintText:   'prod-web-01',
-                prefixIcon: Icon(Icons.dns),
+                labelText:  'Título del Curso',
+                hintText:   'Desarrollo Flutter y Dart',
+                prefixIcon: Icon(Icons.school),
                 border:     OutlineInputBorder(),
               ),
               textInputAction: TextInputAction.next,
@@ -89,12 +89,11 @@ class _Paso1State extends State<_Paso1> {
               controller:      _ctrlIp,
               focusNode:       _focusIp,
               decoration:      const InputDecoration(
-                labelText:  'Dirección IP',
-                hintText:   '192.168.1.100',
-                prefixIcon: Icon(Icons.router),
+                labelText:  'Nombre del Instructor',
+                hintText:   'Alex López',
+                prefixIcon: Icon(Icons.person),
                 border:     OutlineInputBorder(),
               ),
-              keyboardType:    TextInputType.number,
               textInputAction: TextInputAction.next,
               onSubmitted:     (_) => _focusPuerto.requestFocus(),
             ),
@@ -103,8 +102,8 @@ class _Paso1State extends State<_Paso1> {
               controller:      _ctrlPuerto,
               focusNode:       _focusPuerto,
               decoration:      const InputDecoration(
-                labelText:  'Puerto SSH',
-                prefixIcon: Icon(Icons.lock_outline),
+                labelText:  'Cantidad de Lecciones',
+                prefixIcon: Icon(Icons.list),
                 border:     OutlineInputBorder(),
               ),
               keyboardType:    TextInputType.number,
@@ -118,22 +117,22 @@ class _Paso1State extends State<_Paso1> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      'Conectando a ${_ctrlHostname.text} '
-                      '(${_ctrlIp.text}:${_ctrlPuerto.text})',
+                      'Curso registrado: ${_ctrlHostname.text} '
+                      'por ${_ctrlIp.text} (${_ctrlPuerto.text} lecciones)',
                     ),
                     behavior: SnackBarBehavior.floating,
                   ),
                 );
               },
-              icon:  const Icon(Icons.terminal),
-              label: const Text('Conectar'),
+              icon:  const Icon(Icons.save),
+              label: const Text('Crear Curso'),
             ),
             const SizedBox(height: 8),
             OutlinedButton(
               onPressed: () {
                 _ctrlHostname.clear();
                 _ctrlIp.clear();
-                _ctrlPuerto.text = '22';
+                _ctrlPuerto.text = '12';
               },
               child: const Text('Limpiar campos'),
             ),
@@ -154,7 +153,7 @@ class _Paso2 extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title:           const Text('Nuevo servidor'),
+        title: const Text('Nuevo curso'),
         backgroundColor: cs.primaryContainer,
         foregroundColor: cs.onPrimaryContainer,
       ),
@@ -165,7 +164,7 @@ class _Paso2 extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                    'Guardado: ${datos['nombre']} — ${datos['ip']}:${datos['puerto']}'),
+                    'Guardado: ${datos['nombre']} — ${datos['ip']} (${datos['puerto']} clases)'),
                 behavior: SnackBarBehavior.floating,
               ),
             );
@@ -185,10 +184,10 @@ class _Paso3 extends StatefulWidget {
 
 class _Paso3State extends State<_Paso3> {
   final _servidores = [
-    ServidorSSH(id:'1', nombre:'prod-web-01',  ip:'10.0.2.10',   puerto:22,   usuario:'deploy',   so:'Ubuntu 24.04', ssl:true,  favorito:true),
-    ServidorSSH(id:'2', nombre:'prod-db-01',   ip:'10.0.2.20',   puerto:22,   usuario:'postgres', so:'Debian 12',    ssl:true),
-    ServidorSSH(id:'3', nombre:'staging-api',  ip:'10.0.3.10',   puerto:2222, usuario:'ubuntu',   so:'Ubuntu 24.04', ssl:false),
-    ServidorSSH(id:'4', nombre:'dev-sandbox',  ip:'192.168.1.5', puerto:22,   usuario:'vagrant',  so:'Alpine Linux', ssl:false),
+    ServidorSSH(id:'1', nombre:'Desarrollo Flutter y Dart', ip:'Alex López',   puerto:45,   usuario:'Móviles',   so:'Avanzado', ssl:true,  favorito:true),
+    ServidorSSH(id:'2', nombre:'Bases de Datos Relacionales', ip:'Ing. Gómez',   puerto:20,   usuario:'Databases', so:'Intermedio',    ssl:true),
+    ServidorSSH(id:'3', nombre:'Backend Node.js & Express', ip:'Lic. Ruiz',   puerto:35,   usuario:'Backend',   so:'Avanzado', ssl:false),
+    ServidorSSH(id:'4', nombre:'Maquetación Web CSS & HTML', ip:'Profe Diaz', puerto:18,   usuario:'Frontend',  so:'Principiante', ssl:false),
   ];
 
   @override
@@ -197,7 +196,7 @@ class _Paso3State extends State<_Paso3> {
 
     return Scaffold(
       appBar: AppBar(
-        title:           Text('Servidores (${_servidores.length})'),
+        title:           Text('Cursos (${_servidores.length})'),
         backgroundColor: cs.primaryContainer,
         foregroundColor: cs.onPrimaryContainer,
       ),
@@ -206,9 +205,9 @@ class _Paso3State extends State<_Paso3> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.dns_outlined, size: 56, color: cs.onSurfaceVariant),
+                  Icon(Icons.school_outlined, size: 56, color: cs.onSurfaceVariant),
                   const SizedBox(height: 12),
-                  Text('Sin servidores',
+                  Text('Sin cursos',
                       style: TextStyle(color: cs.onSurfaceVariant)),
                 ],
               ),
@@ -228,3 +227,4 @@ class _Paso3State extends State<_Paso3> {
     );
   }
 }
+

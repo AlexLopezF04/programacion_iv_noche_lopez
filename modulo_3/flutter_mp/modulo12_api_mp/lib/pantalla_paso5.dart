@@ -34,7 +34,7 @@ class _PantallaPaso5State extends ConsumerState<PantallaPaso5> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Paso 5 · Arquitectura completa'),
+        title: const Text('Catálogo de Cursos (API Real)'),
         leading: BackButton(onPressed: () => context.go('/')),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(56),
@@ -42,7 +42,7 @@ class _PantallaPaso5State extends ConsumerState<PantallaPaso5> {
             padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
             child: SearchBar(
               controller: _busqueda,
-              hintText: 'Buscar producto…',
+              hintText: 'Buscar curso…',
               leading: const Icon(Icons.search),
               trailing: [
                 if (_busqueda.text.isNotEmpty)
@@ -63,7 +63,7 @@ class _PantallaPaso5State extends ConsumerState<PantallaPaso5> {
       body: _buildBody(estado),
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.refresh),
-        label: const Text('Recargar'),
+        label: const Text('Recargar Cursos'),
         onPressed: () {
           _busqueda.clear();
           ref.read(catalogoProvider.notifier).cargar();
@@ -93,17 +93,14 @@ class _PantallaPaso5State extends ConsumerState<PantallaPaso5> {
         child: ListTile(
           leading: CircleAvatar(
             backgroundColor:
-                p.activo ? Colors.green[100] : Colors.grey[200],
-            child: Text(
-              p.id.toString(),
-              style: TextStyle(
-                color: p.activo ? Colors.green[800] : Colors.grey,
-                fontWeight: FontWeight.bold,
-                fontSize: 11,
-              ),
+                p.activo ? Colors.indigo[100] : Colors.grey[200],
+            child: Icon(
+              Icons.school,
+              color: p.activo ? Colors.indigo[800] : Colors.grey,
+              size: 20,
             ),
           ),
-          title: Text(p.nombre),
+          title: Text(p.nombre, style: const TextStyle(fontWeight: FontWeight.w600)),
           subtitle: Text(p.categoria ?? 'Sin categoría'),
           trailing: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -113,10 +110,11 @@ class _PantallaPaso5State extends ConsumerState<PantallaPaso5> {
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 14)),
               Text(
-                p.activo ? 'Activo' : 'Inactivo',
+                p.activo ? 'Disponible' : 'Borrador',
                 style: TextStyle(
                     color: p.activo ? Colors.green : Colors.grey,
-                    fontSize: 11),
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold),
               ),
             ],
           ),

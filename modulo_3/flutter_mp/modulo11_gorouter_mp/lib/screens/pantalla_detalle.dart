@@ -22,7 +22,7 @@ class PantallaDetalle extends StatelessWidget {
         foregroundColor: cs.onPrimaryContainer,
       ),
       body: srv == null
-          ? Center(child: Text('Servidor $id no encontrado'))
+          ? Center(child: Text('Curso $id no encontrado'))
           : Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -30,9 +30,9 @@ class PantallaDetalle extends StatelessWidget {
                 children: [
                   _Fila('ID',       srv.id),
                   _Fila('Nombre',   srv.nombre),
-                  _Fila('IP',       srv.ip),
-                  _Fila('Puerto',   srv.puerto.toString()),
-                  _Fila('SSL',      srv.ssl ? 'Activo' : 'Inactivo'),
+                  _Fila('Docente',  srv.ip),
+                  _Fila('Clases',   srv.puerto.toString()),
+                  _Fila('Publicado',srv.ssl ? 'Sí' : 'No'),
                   const SizedBox(height: 24),
                   Row(children: [
                     OutlinedButton.icon(
@@ -43,8 +43,8 @@ class PantallaDetalle extends StatelessWidget {
                     const SizedBox(width: 12),
                     FilledButton.icon(
                       onPressed: () => context.push('/servidores/${srv.id}/logs'),
-                      icon:  const Icon(Icons.list_alt),
-                      label: const Text('Ver logs'),
+                      icon:  const Icon(Icons.play_circle_fill),
+                      label: const Text('Ver clases'),
                     ),
                   ]),
                 ],

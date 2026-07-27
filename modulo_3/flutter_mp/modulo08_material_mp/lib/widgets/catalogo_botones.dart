@@ -56,19 +56,19 @@ class CatalogoBotones extends StatelessWidget {
           FilledButton.icon(
             onPressed: () {},
             icon:  const Icon(Icons.send),
-            label: const Text('Enviar reporte'),
+            label: const Text('Enviar respuestas'),
           ),
           const SizedBox(height: 8),
           OutlinedButton.icon(
             onPressed: () {},
             icon:  const Icon(Icons.download),
-            label: const Text('Exportar logs'),
+            label: const Text('Descargar certificado'),
           ),
           const SizedBox(height: 8),
           TextButton.icon(
             onPressed: () {},
             icon:  const Icon(Icons.open_in_new),
-            label: const Text('Ver documentación'),
+            label: const Text('Ver temario'),
           ),
 
           const Divider(height: 32),
@@ -89,17 +89,17 @@ class CatalogoBotones extends StatelessWidget {
               minimumSize:     const Size(double.infinity, 48),
             ),
             onPressed: () {},
-            child: const Text('Eliminar servidor'),
+            child: const Text('Darse de baja del curso'),
           ),
           const SizedBox(height: 8),
           // Fila de botones compactos
           Row(children: [
             Expanded(
-              child: OutlinedButton(onPressed: () {}, child: const Text('Reiniciar')),
+              child: OutlinedButton(onPressed: () {}, child: const Text('Repetir lección')),
             ),
             const SizedBox(width: 8),
             Expanded(
-              child: FilledButton(onPressed: () {}, child: const Text('Apagar')),
+              child: FilledButton(onPressed: () {}, child: const Text('Completar curso')),
             ),
           ]),
         ],
@@ -107,3 +107,4 @@ class CatalogoBotones extends StatelessWidget {
     );
   }
 }
+

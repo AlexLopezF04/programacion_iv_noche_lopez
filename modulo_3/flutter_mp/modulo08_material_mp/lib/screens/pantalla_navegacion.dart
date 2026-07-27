@@ -1,8 +1,22 @@
 // lib/screens/pantalla_navegacion.dart
 import 'package:flutter/material.dart';
+import 'pantalla_ajustes.dart';
 
 class PantallaNavegacion extends StatefulWidget {
-  const PantallaNavegacion({super.key});
+  final ThemeMode themeMode;
+  final Color     seedColor;
+  final void Function(ThemeMode) onThemeMode;
+  final void Function(Color)     onSeedColor;
+  final List<({String nombre, Color color})> paletas;
+
+  const PantallaNavegacion({
+    super.key,
+    required this.themeMode,
+    required this.seedColor,
+    required this.onThemeMode,
+    required this.onSeedColor,
+    required this.paletas,
+  });
 
   @override
   State<PantallaNavegacion> createState() => _PantallaNavegacionState();
@@ -17,16 +31,22 @@ class _PantallaNavegacionState extends State<PantallaNavegacion> {
 
     return Scaffold(
       appBar: AppBar(
-        title:           const Text('Sistema de Monitoreo'),
+        title:           const Text('Academia Online'),
         backgroundColor: cs.surfaceContainerHighest,
       ),
       body: IndexedStack(
         index: _indice,
-        children: const [
-          _PantallaDashboard(),
-          _PantallaServidores(),
-          _PantallaAlertas(),
-          _PantallaAjustes(),
+        children: [
+          const _PantallaDashboard(),
+          const _PantallaCursos(),
+          const _PantallaAlertas(),
+          PantallaAjustes(
+            themeMode: widget.themeMode,
+            seedColor: widget.seedColor,
+            onThemeMode: widget.onThemeMode,
+            onSeedColor: widget.onSeedColor,
+            paletas: widget.paletas,
+          ),
         ],
       ),
       bottomNavigationBar: NavigationBar(
@@ -40,14 +60,14 @@ class _PantallaNavegacionState extends State<PantallaNavegacion> {
             label:        'Dashboard',
           ),
           NavigationDestination(
-            icon:         Icon(Icons.dns_outlined),
-            selectedIcon: Icon(Icons.dns),
-            label:        'Servidores',
+            icon:         Icon(Icons.school_outlined),
+            selectedIcon: Icon(Icons.school),
+            label:        'Cursos',
           ),
           NavigationDestination(
             icon:         Badge(label: Text('3'), child: Icon(Icons.notifications_outlined)),
             selectedIcon: Badge(label: Text('3'), child: Icon(Icons.notifications)),
-            label:        'Alertas',
+            label:        'Mensajes',
           ),
           NavigationDestination(
             icon:         Icon(Icons.settings_outlined),
@@ -73,18 +93,18 @@ class _PantallaDashboard extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        Text('Resumen', style: text.headlineSmall),
+        Text('Progreso de Aprendizaje', style: text.headlineSmall),
         const SizedBox(height: 16),
         Row(children: [
-          Expanded(child: _TarjetaMetrica(titulo: 'Servidores', valor: '8',  icono: Icons.dns,          color: cs.primaryContainer)),
+          Expanded(child: _TarjetaMetrica(titulo: 'Cursos Inscritos', valor: '8',  icono: Icons.school,       color: cs.primaryContainer)),
           const SizedBox(width: 8),
-          Expanded(child: _TarjetaMetrica(titulo: 'Alertas',    valor: '3',  icono: Icons.notifications, color: cs.errorContainer)),
+          Expanded(child: _TarjetaMetrica(titulo: 'Tareas Pendientes', valor: '3',  icono: Icons.assignment,  color: cs.errorContainer)),
         ]),
         const SizedBox(height: 8),
         Row(children: [
-          Expanded(child: _TarjetaMetrica(titulo: 'Uptime',   valor: '99.8%', icono: Icons.trending_up, color: cs.tertiaryContainer)),
+          Expanded(child: _TarjetaMetrica(titulo: 'Progreso Total',   valor: '78.5%', icono: Icons.trending_up, color: cs.tertiaryContainer)),
           const SizedBox(width: 8),
-          Expanded(child: _TarjetaMetrica(titulo: 'Tráfico',  valor: '4.2 GB', icono: Icons.wifi,       color: cs.secondaryContainer)),
+          Expanded(child: _TarjetaMetrica(titulo: 'Horas de Video',  valor: '42.5 h', icono: Icons.play_circle, color: cs.secondaryContainer)),
         ]),
       ],
     );
@@ -126,8 +146,8 @@ class _TarjetaMetrica extends StatelessWidget {
   }
 }
 
-class _PantallaServidores extends StatelessWidget {
-  const _PantallaServidores();
+class _PantallaCursos extends StatelessWidget {
+  const _PantallaCursos();
 
   @override
   Widget build(BuildContext context) {
@@ -138,9 +158,9 @@ class _PantallaServidores extends StatelessWidget {
       itemCount: 6,
       itemBuilder: (ctx, i) => Card(
         child: ListTile(
-          leading:  Icon(Icons.dns, color: cs.primary),
-          title:    Text('prod-web-0${i + 1}'),
-          subtitle: Text('10.0.2.${i + 10} · Activo'),
+          leading:  Icon(Icons.school, color: cs.primary),
+          title:    Text('Curso de Flutter & Dart 0${i + 1}'),
+          subtitle: Text('Instructor: Alex López · Módulo ${i + 1}'),
           trailing: Icon(Icons.chevron_right, color: cs.onSurfaceVariant),
           onTap: () {},
         ),
@@ -158,9 +178,9 @@ class _PantallaAlertas extends StatelessWidget {
     final text = Theme.of(context).textTheme;
 
     const alertas = [
-      (servidor: 'prod-db-01',  mensaje: 'CPU > 90%',         nivel: 'CRÍTICO'),
-      (servidor: 'prod-web-03', mensaje: 'Disco al 85%',      nivel: 'AVISO'),
-      (servidor: 'prod-api-02', mensaje: 'Reinicio inesperado', nivel: 'CRÍTICO'),
+      (curso: 'Examen de Dart',       mensaje: 'Calificación reprobatoria (< 6.0)', nivel: 'CRÍTICO'),
+      (curso: 'Proyecto de Interfaces',mensaje: 'Pendiente de entrega hoy 23:59',   nivel: 'AVISO'),
+      (curso: 'Foro de Discusión',    mensaje: 'Nuevo mensaje del instructor',    nivel: 'NUEVO'),
     ];
 
     return ListView.builder(
@@ -174,10 +194,10 @@ class _PantallaAlertas extends StatelessWidget {
           color: esCritico ? cs.errorContainer : cs.tertiaryContainer,
           child: ListTile(
             leading: Icon(
-              esCritico ? Icons.error : Icons.warning,
+              esCritico ? Icons.error : Icons.info,
               color: esCritico ? cs.onErrorContainer : cs.onTertiaryContainer,
             ),
-            title: Text(alerta.servidor,
+            title: Text(alerta.curso,
                 style: text.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
             subtitle: Text(alerta.mensaje),
             trailing: Chip(
@@ -195,29 +215,3 @@ class _PantallaAlertas extends StatelessWidget {
   }
 }
 
-class _PantallaAjustes extends StatelessWidget {
-  const _PantallaAjustes();
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: const [
-        ListTile(
-          leading: Icon(Icons.notifications_outlined),
-          title:   Text('Notificaciones'),
-          trailing: Icon(Icons.chevron_right),
-        ),
-        ListTile(
-          leading: Icon(Icons.security_outlined),
-          title:   Text('Seguridad'),
-          trailing: Icon(Icons.chevron_right),
-        ),
-        ListTile(
-          leading: Icon(Icons.info_outline),
-          title:   Text('Acerca de'),
-          trailing: Icon(Icons.chevron_right),
-        ),
-      ],
-    );
-  }
-}

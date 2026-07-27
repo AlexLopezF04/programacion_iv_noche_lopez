@@ -13,18 +13,16 @@ class _FormularioServidorState extends State<FormularioServidor> {
   final _formKey  = GlobalKey<FormState>();
 
   final _ctrlNombre  = TextEditingController();
-  final _ctrlIp      = TextEditingController();
-  final _ctrlPuerto  = TextEditingController(text: '22');
-  final _ctrlUsuario = TextEditingController(text: 'root');
+  final _ctrlIp      = TextEditingController(); // Instructor
+  final _ctrlPuerto  = TextEditingController(text: '12'); // Clases
+  final _ctrlUsuario = TextEditingController(text: 'Desarrollo'); // Categoría
 
   final _focusIp      = FocusNode();
   final _focusPuerto  = FocusNode();
   final _focusUsuario = FocusNode();
 
-  String _so  = 'Ubuntu 24.04';
-  bool   _ssl = true;
-
-  static final _regexIp = RegExp(r'^(\d{1,3}\.){3}\d{1,3}$');
+  String _so  = 'Intermedio'; // Nivel
+  bool   _ssl = true; // Publicado
 
   @override
   void dispose() {
@@ -59,110 +57,102 @@ class _FormularioServidorState extends State<FormularioServidor> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
 
-          // ── Nombre del servidor ───────────────────────────────────
+          // ── Título del Curso ──────────────────────────────────────
           TextFormField(
             controller:      _ctrlNombre,
             decoration:      const InputDecoration(
-              labelText:  'Nombre del servidor',
-              hintText:   'prod-web-01',
-              prefixIcon: Icon(Icons.dns),
+              labelText:  'Título del Curso',
+              hintText:   'Desarrollo Flutter Avanzado',
+              prefixIcon: Icon(Icons.school),
               border:     OutlineInputBorder(),
             ),
             textInputAction: TextInputAction.next,
             onFieldSubmitted: (_) => _focusIp.requestFocus(),
             validator: (v) {
-              if (v == null || v.trim().isEmpty) { return 'El nombre es obligatorio'; }
+              if (v == null || v.trim().isEmpty) { return 'El título es obligatorio'; }
               if (v.length < 3) { return 'Mínimo 3 caracteres'; }
-              if (!RegExp(r'^[a-zA-Z0-9\-\_]+$').hasMatch(v)) {
-                return 'Solo letras, números, guiones y guiones bajos';
-              }
               return null;
             },
           ),
           const SizedBox(height: 12),
 
-          // ── Dirección IP ──────────────────────────────────────────
+          // ── Instructor ──────────────────────────────────────────
           TextFormField(
             controller:      _ctrlIp,
             focusNode:       _focusIp,
             decoration:      const InputDecoration(
-              labelText:  'Dirección IP',
-              hintText:   '192.168.1.100',
-              prefixIcon: Icon(Icons.router),
+              labelText:  'Nombre del Instructor',
+              hintText:   'Alex López',
+              prefixIcon: Icon(Icons.person),
               border:     OutlineInputBorder(),
             ),
-            keyboardType:    TextInputType.number,
             textInputAction: TextInputAction.next,
             onFieldSubmitted: (_) => _focusPuerto.requestFocus(),
             validator: (v) {
-              if (v == null || v.isEmpty) return 'La IP es obligatoria';
-              if (!_regexIp.hasMatch(v))  return 'Formato IPv4 inválido (ej. 192.168.1.10)';
-              final octetos = v.split('.').map(int.parse).toList();
-              if (octetos.any((o) => o > 255)) return 'Octeto fuera de rango (0–255)';
+              if (v == null || v.trim().isEmpty) return 'El instructor es obligatorio';
               return null;
             },
           ),
           const SizedBox(height: 12),
 
-          // ── Puerto SSH ────────────────────────────────────────────
+          // ── Cantidad de Clases ─────────────────────────────────────
           TextFormField(
             controller:      _ctrlPuerto,
             focusNode:       _focusPuerto,
             decoration:      const InputDecoration(
-              labelText:  'Puerto',
-              prefixIcon: Icon(Icons.lock_outline),
+              labelText:  'Cantidad de Lecciones',
+              prefixIcon: Icon(Icons.list),
               border:     OutlineInputBorder(),
             ),
             keyboardType:    TextInputType.number,
             textInputAction: TextInputAction.next,
             onFieldSubmitted: (_) => _focusUsuario.requestFocus(),
             validator: (v) {
-              final puerto = int.tryParse(v ?? '');
-              if (puerto == null)              return 'Puerto debe ser un número';
-              if (puerto < 1 || puerto > 65535) return 'Puerto entre 1 y 65535';
+              final clases = int.tryParse(v ?? '');
+              if (clases == null)              return 'Debe ser un número válido';
+              if (clases < 1 || clases > 500)   return 'Cantidad entre 1 y 500 clases';
               return null;
             },
           ),
           const SizedBox(height: 12),
 
-          // ── Usuario ───────────────────────────────────────────────
+          // ── Categoría ─────────────────────────────────────────────
           TextFormField(
             controller:      _ctrlUsuario,
             focusNode:       _focusUsuario,
             decoration:      const InputDecoration(
-              labelText:  'Usuario',
-              prefixIcon: Icon(Icons.person_outline),
+              labelText:  'Categoría',
+              prefixIcon: Icon(Icons.category),
               border:     OutlineInputBorder(),
             ),
             textInputAction: TextInputAction.next,
             validator: (v) =>
-                v == null || v.trim().isEmpty ? 'El usuario es obligatorio' : null,
+                v == null || v.trim().isEmpty ? 'La categoría es obligatoria' : null,
           ),
           const SizedBox(height: 12),
 
-          // ── Sistema Operativo — DropdownButtonFormField ────────────
+          // ── Nivel — DropdownButtonFormField ───────────────────────
           DropdownButtonFormField<String>(
             initialValue: _so,
             decoration: const InputDecoration(
-              labelText:  'Sistema Operativo',
-              prefixIcon: Icon(Icons.computer),
+              labelText:  'Nivel del Curso',
+              prefixIcon: Icon(Icons.trending_up),
               border:     OutlineInputBorder(),
             ),
             items: [
-              'Ubuntu 24.04', 'Debian 12', 'CentOS Stream 9',
-              'Rocky Linux 9', 'Alpine Linux',
+              'Principiante', 'Intermedio', 'Avanzado', 'Especialización',
             ].map((s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
             onChanged: (v) => setState(() => _so = v!),
           ),
           const SizedBox(height: 8),
 
-          // ── SSL — SwitchListTile ──────────────────────────────────
+          // ── Publicado — SwitchListTile ────────────────────────────
           SwitchListTile(
-            title:     const Text('Conexión SSL/TLS'),
-            subtitle:  const Text('Cifrar la comunicación'),
+            title:     const Text('Publicado inmediatamente'),
+            subtitle:  const Text('Hacer visible para los estudiantes'),
             value:     _ssl,
             onChanged: (v) => setState(() => _ssl = v),
-            secondary: const Icon(Icons.security),
+            secondary: const Icon(Icons.visibility),
           ),
           const SizedBox(height: 16),
 
@@ -180,7 +170,7 @@ class _FormularioServidorState extends State<FormularioServidor> {
               child: FilledButton.icon(
                 onPressed: _guardar,
                 icon:  const Icon(Icons.save),
-                label: const Text('Guardar servidor'),
+                label: const Text('Guardar curso'),
               ),
             ),
           ]),
@@ -189,3 +179,4 @@ class _FormularioServidorState extends State<FormularioServidor> {
     );
   }
 }
+

@@ -1,17 +1,20 @@
-class InfoDispositivo {
+class InfoCurso {
   final String       nombre;
-  final String       tipo;       // 'router', 'switch', 'server', 'endpoint'
-  final String       ip;
+  final String       categoria;  // 'Frontend', 'Backend', 'Database', 'Mobile'
+  final String       instructor;
   final bool         activo;
-  final int          alertas;
+  final int          leccionesNuevas;
   final List<String> etiquetas;
+  final int          progreso; // Porcentaje de progreso (0 - 100)
 
-  const InfoDispositivo({
+  const InfoCurso({
     required this.nombre,
-    required this.tipo,
-    required this.ip,
+    required this.categoria,
+    required this.instructor,
     required this.activo,
-    this.alertas   = 0,
+    this.leccionesNuevas = 0,
     this.etiquetas = const [],
+    this.progreso = 0,
   });
 }
+

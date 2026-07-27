@@ -8,8 +8,8 @@ class PantallaDialogs extends StatelessWidget {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(esError
-            ? 'Error: no se pudo conectar al servidor'
-            : 'Conexión SSH establecida correctamente'),
+            ? 'Error: no se pudo matricular al curso'
+            : 'Matrícula al curso procesada exitosamente'),
         backgroundColor: esError
             ? Theme.of(context).colorScheme.error
             : null,
@@ -29,10 +29,10 @@ class PantallaDialogs extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         icon:    const Icon(Icons.warning_amber, color: Colors.orange),
-        title:   const Text('Eliminar servidor'),
+        title:   const Text('Dar de baja curso'),
         content: const Text(
-          '¿Estás seguro de que deseas eliminar prod-web-01?\n'
-          'Esta acción no se puede deshacer.',
+          '¿Estás seguro de que deseas darte de baja de Especialidad en Flutter?\n'
+          'Tu progreso se guardará pero perderás acceso a las videoclases.',
         ),
         actions: [
           TextButton(
@@ -44,7 +44,7 @@ class PantallaDialogs extends StatelessWidget {
               backgroundColor: Theme.of(ctx).colorScheme.error,
             ),
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Eliminar'),
+            child: const Text('Darse de baja'),
           ),
         ],
       ),
@@ -54,7 +54,7 @@ class PantallaDialogs extends StatelessWidget {
 
     if (confirmar == true) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Servidor eliminado correctamente')),
+        const SnackBar(content: Text('Curso dado de baja correctamente')),
       );
     }
   }
@@ -62,12 +62,12 @@ class PantallaDialogs extends StatelessWidget {
   Future<void> _mostrarFormulario(BuildContext context) async {
     final formKey = GlobalKey<FormState>();
     final ctrlNombre = TextEditingController();
-    final ctrlIp     = TextEditingController();
+    final ctrlCategoria = TextEditingController();
 
     await showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Agregar servidor'),
+        title: const Text('Sugerir nuevo curso'),
         content: Form(
           key: formKey,
           child: Column(
@@ -75,19 +75,14 @@ class PantallaDialogs extends StatelessWidget {
             children: [
               TextFormField(
                 controller:  ctrlNombre,
-                decoration:  const InputDecoration(labelText: 'Nombre'),
+                decoration:  const InputDecoration(labelText: 'Título del Curso'),
                 validator:   (v) => v == null || v.isEmpty ? 'Campo requerido' : null,
               ),
               const SizedBox(height: 8),
               TextFormField(
-                controller: ctrlIp,
-                decoration: const InputDecoration(labelText: 'Dirección IP'),
-                validator:  (v) {
-                  if (v == null || v.isEmpty) return 'Campo requerido';
-                  final partes = v.split('.');
-                  if (partes.length != 4) return 'Formato: 192.168.1.1';
-                  return null;
-                },
+                controller: ctrlCategoria,
+                decoration: const InputDecoration(labelText: 'Categoría (Frontend, Backend, etc.)'),
+                validator:  (v) => v == null || v.isEmpty ? 'Campo requerido' : null,
               ),
             ],
           ),
@@ -103,7 +98,7 @@ class PantallaDialogs extends StatelessWidget {
                 Navigator.pop(ctx);
               }
             },
-            child: const Text('Agregar'),
+            child: const Text('Sugerir'),
           ),
         ],
       ),
@@ -112,7 +107,7 @@ class PantallaDialogs extends StatelessWidget {
     if (!context.mounted) return;
     if (ctrlNombre.text.isNotEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Servidor "${ctrlNombre.text}" agregado')),
+        SnackBar(content: Text('Sugerencia de curso "${ctrlNombre.text}" recibida')),
       );
     }
   }
@@ -124,7 +119,7 @@ class PantallaDialogs extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title:           const Text('SnackBar y Dialog'),
+        title:           const Text('Acciones e Interacciones'),
         backgroundColor: cs.surfaceContainerHighest,
       ),
       body: ListView(
@@ -132,12 +127,12 @@ class PantallaDialogs extends StatelessWidget {
         children: [
 
           // ── SnackBar ──────────────────────────────────────────────
-          Text('SnackBar', style: text.labelLarge?.copyWith(color: cs.primary)),
+          Text('Mensajes Rápidos (SnackBar)', style: text.labelLarge?.copyWith(color: cs.primary)),
           const SizedBox(height: 12),
           FilledButton.icon(
             onPressed: () => _mostrarSnackBar(context),
             icon:  const Icon(Icons.check_circle_outline),
-            label: const Text('SnackBar de éxito'),
+            label: const Text('Matricularse (Éxito)'),
           ),
           const SizedBox(height: 8),
           FilledButton.icon(
@@ -147,13 +142,13 @@ class PantallaDialogs extends StatelessWidget {
             ),
             onPressed: () => _mostrarSnackBar(context, esError: true),
             icon:  const Icon(Icons.error_outline),
-            label: const Text('SnackBar de error'),
+            label: const Text('Matricularse (Error)'),
           ),
 
           const Divider(height: 32),
 
           // ── AlertDialog ───────────────────────────────────────────
-          Text('AlertDialog', style: text.labelLarge?.copyWith(color: cs.primary)),
+          Text('Alertas de Confirmación (Dialog)', style: text.labelLarge?.copyWith(color: cs.primary)),
           const SizedBox(height: 12),
           OutlinedButton.icon(
             style: OutlinedButton.styleFrom(
@@ -162,15 +157,16 @@ class PantallaDialogs extends StatelessWidget {
             ),
             onPressed: () => _mostrarConfirmacion(context),
             icon:  const Icon(Icons.delete_outline),
-            label: const Text('Eliminar servidor (confirmación)'),
+            label: const Text('Dar de baja curso (Confirmación)'),
           ),
           const SizedBox(height: 8),
           FilledButton.tonal(
             onPressed: () => _mostrarFormulario(context),
-            child: const Text('Agregar servidor (formulario)'),
+            child: const Text('Sugerir curso (Formulario)'),
           ),
         ],
       ),
     );
   }
 }
+

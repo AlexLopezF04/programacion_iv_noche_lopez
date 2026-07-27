@@ -9,10 +9,10 @@ class ServidoresNotifier extends Notifier<List<ServidorSSH>> {
 
   List<ServidorSSH> _servidoresIniciales() {
     return [
-      ServidorSSH(id: '1', nombre: 'Servidor Principal', host: '192.168.1.10'),
-      ServidorSSH(id: '2', nombre: 'Servidor Backup', host: '192.168.1.20'),
-      ServidorSSH(id: '3', nombre: 'Servidor Web', host: '192.168.1.30', esFavorito: true),
-      ServidorSSH(id: '4', nombre: 'Base de Datos', host: '192.168.1.40'),
+      const ServidorSSH(id: '1', nombre: 'Desarrollo Flutter & Dart', host: 'Alex López', puerto: 45),
+      const ServidorSSH(id: '2', nombre: 'Bases de Datos SQL', host: 'Ing. Gómez', puerto: 20),
+      const ServidorSSH(id: '3', nombre: 'Backend Node.js & Express', host: 'Lic. Ruiz', puerto: 35, esFavorito: true),
+      const ServidorSSH(id: '4', nombre: 'Maquetación Web CSS & HTML', host: 'Profe Diaz', puerto: 18),
     ];
   }
 

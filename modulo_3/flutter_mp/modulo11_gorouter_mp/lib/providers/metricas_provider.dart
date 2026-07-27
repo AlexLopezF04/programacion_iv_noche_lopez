@@ -21,14 +21,14 @@ final metricasProvider = FutureProvider.family<Metricas, String>((ref, servidorI
 
   final datos = <String, Metricas>{
     '1': const Metricas(
-      cpu: 45.2, ram: 62.8, disco: 71.3,
-      conexionesActivas: 12, ultimoPing: '15 ms'),
+      cpu: 85.0, ram: 62.0, disco: 92.0,
+      conexionesActivas: 25, ultimoPing: 'Hace 5 min'),
     '2': const Metricas(
-      cpu: 23.7, ram: 41.5, disco: 55.0,
-      conexionesActivas: 8, ultimoPing: '22 ms'),
+      cpu: 45.0, ram: 20.0, disco: 80.0,
+      conexionesActivas: 10, ultimoPing: 'Ayer'),
     '3': const Metricas(
-      cpu: 12.1, ram: 18.3, disco: 32.9,
-      conexionesActivas: 3, ultimoPing: '48 ms'),
+      cpu: 15.0, ram: 5.0, disco: 75.0,
+      conexionesActivas: 2, ultimoPing: 'Hace 3 días'),
   };
 
   return datos[servidorId] ?? const Metricas(

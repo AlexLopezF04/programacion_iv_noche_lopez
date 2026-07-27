@@ -16,7 +16,7 @@ class PantallaServidores extends ConsumerWidget {
           padding: const EdgeInsets.all(8),
           child: TextField(
             decoration: const InputDecoration(
-              labelText: 'Buscar servidor',
+              labelText: 'Buscar curso',
               prefixIcon: Icon(Icons.search),
               border: OutlineInputBorder(),
             ),
@@ -34,7 +34,7 @@ class PantallaServidores extends ConsumerWidget {
                     final s = servidores[index];
                     return ListTile(
                       title: Text(s.nombre),
-                      subtitle: Text('${s.host}:${s.puerto}'),
+                      subtitle: Text('Instructor: ${s.host} · ${s.puerto} clases'),
                       leading: IconButton(
                         icon: Icon(
                           s.esFavorito ? Icons.star : Icons.star_border,

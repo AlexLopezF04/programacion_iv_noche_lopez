@@ -1,65 +1,102 @@
 import 'package:flutter/material.dart';
 
-class GridPuertos extends StatelessWidget {
-  const GridPuertos({super.key});
+class GridModulos extends StatelessWidget {
+  const GridModulos({super.key});
 
   @override
   Widget build(BuildContext context) {
     final estados = List.generate(24, (i) {
-      if (i < 10) return _EstadoPuerto.activo;
-      if (i < 16) return _EstadoPuerto.libre;
-      if (i < 20) return _EstadoPuerto.error;
-      return _EstadoPuerto.bloqueado;
+      if (i < 12) return _EstadoModulo.completado;
+      if (i < 15) return _EstadoModulo.enProgreso;
+      if (i < 20) return _EstadoModulo.pendiente;
+      return _EstadoModulo.bloqueado;
     });
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Puertos del Switch')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Wrap(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Text(
+          'Progreso por Capítulos (Módulos)',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        const SizedBox(height: 12),
+        Wrap(
           spacing: 8,
           runSpacing: 8,
           children: List.generate(24, (i) {
-            return Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: _colorEstado(estados[i]),
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(
-                  color: _colorEstado(estados[i]).withValues(alpha: 0.5),
+            return Tooltip(
+              message: 'Capítulo ${i + 1}: ${_descripcionEstado(estados[i])}',
+              child: Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  color: _colorEstado(estados[i]).withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: _colorEstado(estados[i]),
+                    width: 1.5,
+                  ),
                 ),
-              ),
-              child: Center(
-                child: Text(
-                  '${i + 1}',
-                  style: TextStyle(
-                    fontSize: 9,
-                    fontWeight: FontWeight.w600,
-                    color: _textoColor(estados[i]),
+                child: Center(
+                  child: Text(
+                    'C${i + 1}',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: _colorEstado(estados[i]).shade900,
+                    ),
                   ),
                 ),
               ),
             );
           }),
         ),
-      ),
+        const SizedBox(height: 12),
+        // Leyenda del mapa
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _LeyendaItem(color: Colors.green, texto: 'Visto'),
+            _LeyendaItem(color: Colors.orange, texto: 'En Curso'),
+            _LeyendaItem(color: Colors.grey, texto: 'Pendiente'),
+            _LeyendaItem(color: Colors.red, texto: 'Bloqueado'),
+          ],
+        ),
+      ],
     );
   }
 
-  Color _colorEstado(_EstadoPuerto e) => switch (e) {
-    _EstadoPuerto.activo    => Colors.green,
-    _EstadoPuerto.libre     => Colors.grey.shade300,
-    _EstadoPuerto.error     => Colors.orange,
-    _EstadoPuerto.bloqueado => Colors.red,
+  MaterialColor _colorEstado(_EstadoModulo e) => switch (e) {
+    _EstadoModulo.completado => Colors.green,
+    _EstadoModulo.pendiente  => Colors.grey,
+    _EstadoModulo.enProgreso  => Colors.orange,
+    _EstadoModulo.bloqueado  => Colors.red,
   };
 
-  Color _textoColor(_EstadoPuerto e) => switch (e) {
-    _EstadoPuerto.activo    => Colors.white,
-    _EstadoPuerto.libre     => Colors.grey.shade600,
-    _EstadoPuerto.error     => Colors.white,
-    _EstadoPuerto.bloqueado => Colors.white,
+  String _descripcionEstado(_EstadoModulo e) => switch (e) {
+    _EstadoModulo.completado => 'Completado',
+    _EstadoModulo.pendiente  => 'Pendiente',
+    _EstadoModulo.enProgreso  => 'En Progreso',
+    _EstadoModulo.bloqueado  => 'Bloqueado por prerrequisitos',
   };
 }
 
-enum _EstadoPuerto { activo, libre, error, bloqueado }
+class _LeyendaItem extends StatelessWidget {
+  final Color color;
+  final String texto;
+  const _LeyendaItem({required this.color, required this.texto});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(width: 8, height: 8, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+        const SizedBox(width: 4),
+        Text(texto, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500)),
+      ],
+    );
+  }
+}
+
+enum _EstadoModulo { completado, pendiente, enProgreso, bloqueado }

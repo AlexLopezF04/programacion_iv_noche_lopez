@@ -27,7 +27,7 @@ class TarjetaServidorGrid extends StatelessWidget {
           children: [
             Row(children: [
               Icon(
-                Icons.dns,
+                Icons.school,
                 color: servidor.ssl ? cs.primary : cs.outline,
                 size: 18,
               ),
@@ -49,7 +49,7 @@ class TarjetaServidorGrid extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             Text(
-              servidor.ip,
+              'Instructor: ${servidor.ip}',
               style: text.bodySmall?.copyWith(color: cs.onSurfaceVariant),
             ),
             const Spacer(),
@@ -57,11 +57,11 @@ class TarjetaServidorGrid extends StatelessWidget {
               if (servidor.ssl)
                 Padding(
                   padding: const EdgeInsets.only(right: 4),
-                  child: Icon(Icons.lock, size: 12, color: cs.primary),
+                  child: Icon(Icons.check_circle_outline, size: 12, color: cs.primary),
                 ),
               Expanded(
                 child: Text(
-                  servidor.so,
+                  '${servidor.so} · ${servidor.puerto} clases',
                   style: text.labelSmall?.copyWith(color: cs.onSurfaceVariant),
                   overflow: TextOverflow.ellipsis,
                 ),

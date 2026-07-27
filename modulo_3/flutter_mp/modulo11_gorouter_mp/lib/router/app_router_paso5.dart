@@ -36,7 +36,7 @@ GoRouter appRouterPaso5(WidgetRef ref) => GoRouter(
       routes: [
         GoRoute(
           path:    '/servidores',
-          builder: (_, __) => const PantallaServidores(),
+          builder: (_, _) => const PantallaServidores(),
           routes: [
             GoRoute(
               path:    ':id',
@@ -56,13 +56,13 @@ GoRouter appRouterPaso5(WidgetRef ref) => GoRouter(
             ),
           ],
         ),
-        GoRoute(path: '/metricas', builder: (_, __) => const PantallaMetricas()),
-        GoRoute(path: '/ajustes',  builder: (_, __) => const PantallaAjustes()),
+        GoRoute(path: '/metricas', builder: (_, _) => const PantallaMetricas()),
+        GoRoute(path: '/ajustes',  builder: (_, _) => const PantallaAjustes()),
       ],
     ),
     GoRoute(
       path:    '/login',
-      builder: (_, __) => const PantallaLogin(),
+      builder: (_, _) => const PantallaLogin(),
     ),
   ],
 );

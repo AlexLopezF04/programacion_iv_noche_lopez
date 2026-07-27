@@ -19,7 +19,7 @@ final appRouterPaso4 = GoRouter(
       routes: [
         GoRoute(
           path:    '/servidores',
-          builder: (_, __) => const PantallaServidores(),
+          builder: (_, _) => const PantallaServidores(),
           routes: [
             GoRoute(
               path:    ':id',
@@ -42,11 +42,11 @@ final appRouterPaso4 = GoRouter(
         ),
         GoRoute(
           path:    '/metricas',
-          builder: (_, __) => const PantallaMetricas(),
+          builder: (_, _) => const PantallaMetricas(),
         ),
         GoRoute(
           path:    '/ajustes',
-          builder: (_, __) => const PantallaAjustes(),
+          builder: (_, _) => const PantallaAjustes(),
         ),
       ],
     ),

@@ -24,7 +24,7 @@ class FilaServidor extends StatelessWidget {
             ? cs.primaryContainer
             : cs.surfaceContainerHighest,
         child: Icon(
-          Icons.dns,
+          Icons.school,
           color: servidor.ssl ? cs.onPrimaryContainer : cs.onSurfaceVariant,
         ),
       ),
@@ -33,7 +33,7 @@ class FilaServidor extends StatelessWidget {
         style: const TextStyle(fontWeight: FontWeight.w600),
       ),
       subtitle: Text(
-        '${servidor.usuario}@${servidor.ip}:${servidor.puerto}',
+        'Instructor: ${servidor.ip} · ${servidor.puerto} lecciones · ${servidor.usuario}',
         style: TextStyle(fontSize: 12, color: cs.onSurfaceVariant),
       ),
       trailing: Row(

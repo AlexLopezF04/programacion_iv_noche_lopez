@@ -29,8 +29,8 @@ class ScaffoldConNav extends StatelessWidget {
         },
         destinations: const [
           NavigationDestination(
-            icon: Icon(Icons.dns_outlined), selectedIcon: Icon(Icons.dns),
-            label: 'Servidores',
+            icon: Icon(Icons.school_outlined), selectedIcon: Icon(Icons.school),
+            label: 'Cursos',
           ),
           NavigationDestination(
             icon: Icon(Icons.bar_chart_outlined), selectedIcon: Icon(Icons.bar_chart),

@@ -11,7 +11,7 @@ class PantallaServidores extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title:           const Text('Servidores'),
+        title:           const Text('Mis Cursos'),
         backgroundColor: cs.primaryContainer,
         foregroundColor: cs.onPrimaryContainer,
       ),
@@ -20,9 +20,9 @@ class PantallaServidores extends StatelessWidget {
         itemBuilder: (context, i) {
           final s = servidoresSimulados[i];
           return ListTile(
-            leading: Icon(Icons.dns, color: s.ssl ? Colors.green : Colors.grey),
+            leading: Icon(Icons.school, color: s.ssl ? Colors.indigo : Colors.grey),
             title:   Text(s.nombre),
-            subtitle: Text('${s.ip}:${s.puerto}'),
+            subtitle: Text('Instructor: ${s.ip} · ${s.puerto} clases'),
             onTap: () => context.push(
               '/servidores/${s.id}',
               extra: s,

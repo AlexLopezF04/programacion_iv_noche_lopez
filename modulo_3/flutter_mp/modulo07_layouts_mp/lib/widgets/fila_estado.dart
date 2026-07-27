@@ -20,8 +20,8 @@ class FilaEstado extends StatelessWidget {
         children: [
           // Ícono de estado
           Icon(
-            activo ? Icons.check_circle : Icons.cancel,
-            color: activo ? Colors.green : Colors.red,
+            activo ? Icons.check_circle : Icons.pause_circle_filled,
+            color: activo ? Colors.green : Colors.orange,
             size:  20,
           ),
           const SizedBox(width: 12),
@@ -48,14 +48,14 @@ class FilaEstado extends StatelessWidget {
           Container(
             padding:    const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color:        (activo ? Colors.green : Colors.red).withValues(alpha: 0.1),
+              color:        (activo ? Colors.green : Colors.orange).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
-              activo ? 'Activo' : 'Caído',
+              activo ? 'En Curso' : 'Pausado',
               style: TextStyle(
                 fontSize:   11,
-                color:      activo ? Colors.green.shade700 : Colors.red.shade700,
+                color:      activo ? Colors.green.shade700 : Colors.orange.shade700,
                 fontWeight: FontWeight.w600,
               ),
             ),

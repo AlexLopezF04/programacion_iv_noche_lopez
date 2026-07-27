@@ -9,38 +9,38 @@ class PantallaTopologia extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dispositivos = [
-      const InfoDispositivo(
-        nombre: 'core-router', tipo: 'router',
-        ip: '10.0.0.1', activo: true, alertas: 2,
-        etiquetas: ['BGP', 'OSPF', 'Gateway'],
+      const InfoCurso(
+        nombre: 'Desarrollo Flutter y Dart', categoria: 'mobile',
+        instructor: 'Alex López', activo: true, leccionesNuevas: 2,
+        etiquetas: ['Dart', 'Widgets', 'Mobile'], progreso: 75,
       ),
-      const InfoDispositivo(
-        nombre: 'sw-distribucion', tipo: 'switch',
-        ip: '10.0.1.1', activo: true, alertas: 0,
-        etiquetas: ['L3', 'VLAN 10', 'VLAN 20'],
+      const InfoCurso(
+        nombre: 'Bases de Datos Relacionales', categoria: 'database',
+        instructor: 'Ing. Gómez', activo: true, leccionesNuevas: 0,
+        etiquetas: ['PostgreSQL', 'Query', 'L3'], progreso: 40,
       ),
-      const InfoDispositivo(
-        nombre: 'prod-web-01', tipo: 'server',
-        ip: '10.0.2.10', activo: true, alertas: 1,
-        etiquetas: ['nginx', 'TLS'],
+      const InfoCurso(
+        nombre: 'Backend con Node.js & Express', categoria: 'backend',
+        instructor: 'Lic. Ruiz', activo: true, leccionesNuevas: 1,
+        etiquetas: ['Express', 'REST', 'APIs'], progreso: 90,
       ),
-      const InfoDispositivo(
-        nombre: 'prod-db-01', tipo: 'server',
-        ip: '10.0.2.20', activo: true, alertas: 3,
-        etiquetas: ['PostgreSQL', 'Primary'],
+      const InfoCurso(
+        nombre: 'Maquetación Web con CSS y HTML', categoria: 'frontend',
+        instructor: 'Profe Diaz', activo: true, leccionesNuevas: 3,
+        etiquetas: ['HTML', 'CSS', 'Flexbox'], progreso: 100,
       ),
-      const InfoDispositivo(
-        nombre: 'backup-srv', tipo: 'server',
-        ip: '10.0.3.5', activo: false, alertas: 0,
-        etiquetas: ['Backup', 'Offsite'],
+      const InfoCurso(
+        nombre: 'Arquitectura Clean en Dart', categoria: 'backend',
+        instructor: 'Ing. López', activo: false, leccionesNuevas: 0,
+        etiquetas: ['Clean Code', 'Design Patterns'], progreso: 15,
       ),
     ];
 
-    final totalAlertas = dispositivos.fold(0, (s, d) => s + d.alertas);
+    final totalAlertas = dispositivos.fold(0, (s, d) => s + d.leccionesNuevas);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Topología de Red'),
+        title: const Text('Mis Cursos Inscritos'),
         actions: [
           IconButton(icon: const Icon(Icons.filter_list), onPressed: () {}),
           IconButton(icon: const Icon(Icons.refresh),     onPressed: () {}),
@@ -55,8 +55,8 @@ class PantallaTopologia extends StatelessWidget {
             child: Row(
               children: [
                 ChipResumen(
-                  icono: Icons.hub,
-                  texto: '${dispositivos.length} dispositivos',
+                  icono: Icons.school,
+                  texto: '${dispositivos.length} cursos',
                   color: Colors.indigo,
                 ),
                 const SizedBox(width: 16),
@@ -67,8 +67,8 @@ class PantallaTopologia extends StatelessWidget {
                 ),
                 const SizedBox(width: 16),
                 ChipResumen(
-                  icono: Icons.warning_amber,
-                  texto: '$totalAlertas alertas',
+                  icono: Icons.notification_important,
+                  texto: '$totalAlertas nuevas',
                   color: Colors.orange,
                 ),
               ],
@@ -89,3 +89,4 @@ class PantallaTopologia extends StatelessWidget {
     );
   }
 }
+

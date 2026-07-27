@@ -13,10 +13,10 @@ class PantallaGestor extends StatefulWidget {
 
 class _PantallaGestorState extends State<PantallaGestor> {
   final _servidores = [
-    ServidorSSH(id:'1', nombre:'prod-web-01',  ip:'10.0.2.10',   puerto:22,   usuario:'deploy',   so:'Ubuntu 24.04', ssl:true,  favorito:true),
-    ServidorSSH(id:'2', nombre:'prod-db-01',   ip:'10.0.2.20',   puerto:22,   usuario:'postgres', so:'Debian 12',    ssl:true),
-    ServidorSSH(id:'3', nombre:'staging-api',  ip:'10.0.3.10',   puerto:2222, usuario:'ubuntu',   so:'Ubuntu 24.04', ssl:false),
-    ServidorSSH(id:'4', nombre:'dev-sandbox',  ip:'192.168.1.5', puerto:22,   usuario:'vagrant',  so:'Alpine Linux', ssl:false),
+    ServidorSSH(id:'1', nombre:'Desarrollo Flutter y Dart', ip:'Alex López',   puerto:45,   usuario:'Móviles',   so:'Avanzado', ssl:true,  favorito:true),
+    ServidorSSH(id:'2', nombre:'Bases de Datos Relacionales', ip:'Ing. Gómez',   puerto:20,   usuario:'Databases', so:'Intermedio',    ssl:true),
+    ServidorSSH(id:'3', nombre:'Backend Node.js & Express', ip:'Lic. Ruiz',   puerto:35,   usuario:'Backend',   so:'Avanzado', ssl:false),
+    ServidorSSH(id:'4', nombre:'Maquetación Web CSS & HTML', ip:'Profe Diaz', puerto:18,   usuario:'Frontend',  so:'Principiante', ssl:false),
   ];
 
   String _busqueda    = '';
@@ -26,7 +26,7 @@ class _PantallaGestorState extends State<PantallaGestor> {
   List<ServidorSSH> get _filtrados => _servidores
       .where((s) =>
           s.nombre.toLowerCase().contains(_busqueda.toLowerCase()) ||
-          s.ip.contains(_busqueda) ||
+          s.ip.toLowerCase().contains(_busqueda.toLowerCase()) ||
           s.usuario.toLowerCase().contains(_busqueda.toLowerCase()))
       .toList();
 
@@ -47,7 +47,7 @@ class _PantallaGestorState extends State<PantallaGestor> {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content:  Text('Servidor "${datos['nombre']}" agregado'),
+        content:  Text('Curso "${datos['nombre']}" agregado'),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -58,8 +58,8 @@ class _PantallaGestorState extends State<PantallaGestor> {
       context: context,
       builder: (ctx) => AlertDialog(
         icon:    const Icon(Icons.warning_amber, color: Colors.orange),
-        title:   const Text('Eliminar servidor'),
-        content: Text('¿Eliminar "${s.nombre}" (${s.ip})?'),
+        title:   const Text('Eliminar curso'),
+        content: Text('¿Eliminar "${s.nombre}" de ${s.ip}?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
@@ -89,8 +89,8 @@ class _PantallaGestorState extends State<PantallaGestor> {
     return Scaffold(
       appBar: AppBar(
         title: _mostrarForm
-            ? const Text('Nuevo servidor')
-            : Text('Servidores SSH (${_servidores.length})'),
+            ? const Text('Nuevo curso')
+            : Text('Gestor de Cursos (${_servidores.length})'),
         backgroundColor: cs.primaryContainer,
         foregroundColor: cs.onPrimaryContainer,
         leading: _mostrarForm
@@ -121,7 +121,7 @@ class _PantallaGestorState extends State<PantallaGestor> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
                   child: SearchBar(
-                    hintText: 'Buscar por nombre, IP o usuario...',
+                    hintText: 'Buscar por título, instructor o categoría...',
                     leading:  const Icon(Icons.search),
                     trailing: _busqueda.isNotEmpty
                         ? [
@@ -218,7 +218,7 @@ class _PantallaGestorState extends State<PantallaGestor> {
           : FloatingActionButton.extended(
               onPressed: () => setState(() => _mostrarForm = true),
               icon:  const Icon(Icons.add),
-              label: const Text('Nuevo servidor'),
+              label: const Text('Nuevo curso'),
             ),
     );
   }

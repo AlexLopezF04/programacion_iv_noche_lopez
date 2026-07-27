@@ -22,7 +22,7 @@ class PantallaPaso2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Paso 2 · DTO simple'),
+        title: const Text('Paso 2 · DTO simple (Lecciones)'),
         leading: BackButton(onPressed: () => context.go('/')),
       ),
       body: FutureBuilder<List<TodoDto>>(

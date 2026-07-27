@@ -11,12 +11,12 @@ import 'pantalla_paso5.dart';
 final _router = GoRouter(
   initialLocation: '/',
   routes: [
-    GoRoute(path: '/',      builder: (_, __) => const PantallaMenu()),
-    GoRoute(path: '/paso1', builder: (_, __) => const PantallaPaso1()),
-    GoRoute(path: '/paso2', builder: (_, __) => const PantallaPaso2()),
-    GoRoute(path: '/paso3', builder: (_, __) => const PantallaPaso3()),
-    GoRoute(path: '/paso4', builder: (_, __) => const PantallaPaso4()),
-    GoRoute(path: '/paso5', builder: (_, __) => const PantallaPaso5()),
+    GoRoute(path: '/',      builder: (_, _) => const PantallaMenu()),
+    GoRoute(path: '/paso1', builder: (_, _) => const PantallaPaso1()),
+    GoRoute(path: '/paso2', builder: (_, _) => const PantallaPaso2()),
+    GoRoute(path: '/paso3', builder: (_, _) => const PantallaPaso3()),
+    GoRoute(path: '/paso4', builder: (_, _) => const PantallaPaso4()),
+    GoRoute(path: '/paso5', builder: (_, _) => const PantallaPaso5()),
   ],
 );
 
@@ -46,31 +46,31 @@ class PantallaMenu extends StatelessWidget {
         ruta: '/paso1',
         titulo: 'Paso 1',
         subtitulo: 'FutureBuilder crudo',
-        detalle: 'http.get() + FutureBuilder · JSONPlaceholder',
-        icono: Icons.network_ping,
+        detalle: 'http.get() + FutureBuilder · Cursos JSON',
+        icono: Icons.school,
         color: Colors.blue,
       ),
       _PasoInfo(
         ruta: '/paso2',
         titulo: 'Paso 2',
         subtitulo: 'DTO simple',
-        detalle: 'TodoDto.fromJson · lista de tareas',
-        icono: Icons.data_object,
+        detalle: 'TodoDto.fromJson · Clases del Curso',
+        icono: Icons.checklist,
         color: Colors.green,
       ),
       _PasoInfo(
         ruta: '/paso3',
         titulo: 'Paso 3',
         subtitulo: 'API real + modelo de dominio',
-        detalle: 'ProductoDto · toDomain() · API Platzi',
-        icono: Icons.shopping_bag,
+        detalle: 'ProductoDto · toDomain() · API Platzi Cursos',
+        icono: Icons.library_books,
         color: Colors.orange,
       ),
       _PasoInfo(
         ruta: '/paso4',
         titulo: 'Paso 4',
         subtitulo: 'Errores tipados',
-        detalle: 'sealed ApiError · Result<T>',
+        detalle: 'sealed ApiError · Result<T> Cursos',
         icono: Icons.error_outline,
         color: Colors.red,
       ),
@@ -78,7 +78,7 @@ class PantallaMenu extends StatelessWidget {
         ruta: '/paso5',
         titulo: 'Paso 5',
         subtitulo: 'Arquitectura completa',
-        detalle: 'HttpClient · Repository · Riverpod Notifier',
+        detalle: 'HttpClient · Repository · Riverpod Cursos',
         icono: Icons.architecture,
         color: Colors.purple,
       ),
@@ -86,13 +86,13 @@ class PantallaMenu extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Módulo 12 — API REST'),
+        title: const Text('Módulo 12 — API REST Cursos'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: ListView.separated(
         padding: const EdgeInsets.all(16),
         itemCount: pasos.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 8),
+        separatorBuilder: (_, _) => const SizedBox(height: 8),
         itemBuilder: (context, i) {
           final p = pasos[i];
           return Card(

@@ -11,7 +11,7 @@ class PantallaInicio extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title:           const Text('Monitor SSH'),
+        title:           const Text('Plataforma Académica'),
         backgroundColor: cs.primaryContainer,
         foregroundColor: cs.onPrimaryContainer,
       ),
@@ -19,19 +19,19 @@ class PantallaInicio extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.terminal, size: 64, color: cs.primary),
+            Icon(Icons.school, size: 64, color: cs.primary),
             const SizedBox(height: 16),
-            const Text('Dashboard de Monitoreo',
+            const Text('Mis Cursos Online',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            Text('Gestiona tus servidores SSH',
+            Text('Gestiona y aprende con tus cursos inscritos',
                 style: TextStyle(color: cs.onSurfaceVariant)),
             const SizedBox(height: 32),
             FilledButton.icon(
               // context.go() — navega SIN apilar (no hay botón "atrás")
               onPressed: () => context.go('/servidores'),
-              icon:  const Icon(Icons.dns),
-              label: const Text('Ver servidores'),
+              icon:  const Icon(Icons.school),
+              label: const Text('Ver mis cursos'),
             ),
           ],
         ),

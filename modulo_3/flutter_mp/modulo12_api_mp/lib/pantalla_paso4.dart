@@ -39,7 +39,7 @@ class PantallaPaso4 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Paso 4 · Errores tipados'),
+        title: const Text('Paso 4 · Errores tipados (Cursos)'),
         leading: BackButton(onPressed: () => context.go('/')),
       ),
       body: FutureBuilder<Result<List<Producto>>>(

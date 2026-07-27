@@ -11,11 +11,11 @@ class FilaEstadisticas extends StatelessWidget {
         height: 80,
         child: Row(
           children: [
-            _Seccion(valor: '45ms', etiqueta: 'Latencia'),
+            _Seccion(valor: '120 min', etiqueta: 'Estudio Hoy'),
             const VerticalDivider(width: 1, thickness: 1),
-            _Seccion(valor: '12.4k', etiqueta: 'Paquetes'),
+            _Seccion(valor: '14 / 24', etiqueta: 'Clases Completas'),
             const VerticalDivider(width: 1, thickness: 1),
-            _Seccion(valor: '99.8%', etiqueta: 'Uptime'),
+            _Seccion(valor: '78.5%', etiqueta: 'Progreso Gral.'),
           ],
         ),
       ),

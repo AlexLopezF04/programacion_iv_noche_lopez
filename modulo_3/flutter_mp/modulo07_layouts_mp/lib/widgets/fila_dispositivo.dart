@@ -3,16 +3,16 @@ import '../models/dispositivo.dart';
 import 'avatar_badge.dart';
 
 class FilaDispositivo extends StatelessWidget {
-  final InfoDispositivo dispositivo;
+  final InfoCurso dispositivo;
 
   const FilaDispositivo({super.key, required this.dispositivo});
 
-  IconData get _icono => switch (dispositivo.tipo) {
-    'router'   => Icons.router,
-    'switch'   => Icons.device_hub,
-    'server'   => Icons.dns,
-    'endpoint' => Icons.computer,
-    _          => Icons.devices,
+  IconData get _icono => switch (dispositivo.categoria.toLowerCase()) {
+    'frontend' => Icons.web,
+    'backend'  => Icons.storage,
+    'database' => Icons.dns,
+    'mobile'   => Icons.phone_android,
+    _          => Icons.menu_book,
   };
 
   @override
@@ -26,7 +26,7 @@ class FilaDispositivo extends StatelessWidget {
           // AvatarBadge — Stack del Paso 4
           AvatarBadge(
             nombre:  dispositivo.nombre,
-            alertas: dispositivo.alertas,
+            alertas: dispositivo.leccionesNuevas,
             activo:  dispositivo.activo,
           ),
 
@@ -49,7 +49,7 @@ class FilaDispositivo extends StatelessWidget {
                     Icon(_icono, size: 16, color: Colors.grey.shade500),
                   ],
                 ),
-                Text(dispositivo.ip,
+                Text('Instructor: ${dispositivo.instructor}',
                     style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
                 const SizedBox(height: 6),
                 Wrap(
@@ -78,3 +78,4 @@ class FilaDispositivo extends StatelessWidget {
     );
   }
 }
+

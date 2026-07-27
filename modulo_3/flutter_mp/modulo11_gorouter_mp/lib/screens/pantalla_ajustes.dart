@@ -17,7 +17,7 @@ class PantallaAjustes extends ConsumerWidget {
           ListTile(
             leading:  const CircleAvatar(child: Icon(Icons.person)),
             title:    Text(usuario),
-            subtitle: const Text('Administrador'),
+            subtitle: const Text('Estudiante'),
           ),
           const Divider(),
           ListTile(

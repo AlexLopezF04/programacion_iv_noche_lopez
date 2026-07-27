@@ -1,5 +1,9 @@
 // lib/screens/pantalla_ajustes.dart
 import 'package:flutter/material.dart';
+import 'pantalla_tema.dart';
+import 'pantalla_appbar.dart';
+import 'pantalla_dialogs.dart';
+import '../widgets/catalogo_botones.dart';
 
 class PantallaAjustes extends StatelessWidget {
   final ThemeMode themeMode;
@@ -110,28 +114,28 @@ class PantallaAjustes extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('prod-web-01',
+                        Text('Curso de Flutter & Dart',
                             style: text.titleMedium?.copyWith(
                                 fontWeight: FontWeight.bold)),
-                        Text('10.0.2.10 · Ubuntu 24.04',
+                        Text('Instructor: Alex López · Módulo 1',
                             style: text.bodySmall?.copyWith(
                                 color: cs.onSurfaceVariant)),
                         const SizedBox(height: 12),
                         Row(children: [
                           FilledButton.icon(
                             onPressed: () {},
-                            icon:  const Icon(Icons.terminal, size: 16),
-                            label: const Text('SSH'),
+                            icon:  const Icon(Icons.play_circle_fill, size: 16),
+                            label: const Text('Clase'),
                           ),
                           const SizedBox(width: 8),
                           OutlinedButton(
                             onPressed: () {},
-                            child: const Text('Métricas'),
+                            child: const Text('Temario'),
                           ),
                           const SizedBox(width: 8),
                           TextButton(
                             onPressed: () {},
-                            child: const Text('Logs'),
+                            child: const Text('Calificar'),
                           ),
                         ]),
                       ],
@@ -152,6 +156,38 @@ class PantallaAjustes extends StatelessWidget {
                 ]),
               ],
             ),
+          ),
+
+          const Divider(height: 32),
+
+          _SeccionTitulo('Componentes del Módulo 8'),
+          ListTile(
+            leading: const Icon(Icons.palette_outlined),
+            title: const Text('Paso 2: Modo de Tema'),
+            subtitle: const Text('Tema claro, oscuro y dinámico'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => PantallaTema(themeMode: themeMode, onToggle: onThemeMode))),
+          ),
+          ListTile(
+            leading: const Icon(Icons.view_day_outlined),
+            title: const Text('Paso 3: AppBar y SliverAppBar'),
+            subtitle: const Text('Large AppBar colapsable al hacer scroll'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const PantallaAppBar())),
+          ),
+          ListTile(
+            leading: const Icon(Icons.smart_button_outlined),
+            title: const Text('Paso 4: Variantes de Botones'),
+            subtitle: const Text('Filled, Tonal, Elevated, Outlined, Text'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CatalogoBotones())),
+          ),
+          ListTile(
+            leading: const Icon(Icons.announcement_outlined),
+            title: const Text('Paso 6: Diálogos y Avisos'),
+            subtitle: const Text('SnackBar y AlertDialog de matrícula'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const PantallaDialogs())),
           ),
 
           const SizedBox(height: 32),

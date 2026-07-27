@@ -1,9 +1,9 @@
 class ServidorSSH {
   final String id;
   final String nombre;
-  final String ip;
-  final int    puerto;
-  final bool   ssl;
+  final String ip; // Instructor
+  final int    puerto; // Clases
+  final bool   ssl; // Publicado
 
   const ServidorSSH({
     required this.id,
@@ -16,7 +16,7 @@ class ServidorSSH {
 
 // Lista simulada — en una app real vendría de un provider
 const servidoresSimulados = [
-  ServidorSSH(id: '1', nombre: 'prod-web-01', ip: '10.0.2.10',   puerto: 22,   ssl: true),
-  ServidorSSH(id: '2', nombre: 'prod-db-01',  ip: '10.0.2.20',   puerto: 22,   ssl: true),
-  ServidorSSH(id: '3', nombre: 'staging-api', ip: '10.0.3.10',   puerto: 2222, ssl: false),
-];
+  ServidorSSH(id: '1', nombre: 'Desarrollo Flutter & Dart', ip: 'Alex López',   puerto: 45,   ssl: true),
+  ServidorSSH(id: '2', nombre: 'Bases de Datos SQL',  ip: 'Ing. Gómez',   puerto: 20,   ssl: true),
+  ServidorSSH(id: '3', nombre: 'Backend Node.js & Express', ip: 'Lic. Ruiz',   puerto: 35,   ssl: false),
+];

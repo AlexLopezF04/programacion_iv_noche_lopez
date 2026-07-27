@@ -2,9 +2,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:modulo08_material3/main.dart';
 
 void main() {
-  testWidgets('AppMonitoreo muestra el servidor en paso 1', (WidgetTester tester) async {
-    await tester.pumpWidget(const AppMonitoreo());
-    expect(find.text('Servidor web-01'), findsOneWidget);
-    expect(find.text('Conectar SSH'), findsOneWidget);
+  testWidgets('AppCursos muestra la navegación de academia online', (WidgetTester tester) async {
+    await tester.pumpWidget(const AppCursos());
+    expect(find.text('Academia Online'), findsOneWidget);
+    expect(find.text('Progreso de Aprendizaje'), findsOneWidget);
   });
 }
+

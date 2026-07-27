@@ -28,7 +28,7 @@ class PantallaDashboard extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(indice == 0 ? 'Servidores' : 'Métricas'),
+        title: Text(indice == 0 ? 'Mis Cursos' : 'Mis Métricas'),
       ),
       body: paginas[indice],
       bottomNavigationBar: NavigationBar(
@@ -38,13 +38,13 @@ class PantallaDashboard extends ConsumerWidget {
         },
         destinations: const [
           NavigationDestination(
-            icon: Icon(Icons.dns_outlined),
-            selectedIcon: Icon(Icons.dns),
-            label: 'Servidores',
+            icon: Icon(Icons.school_outlined),
+            selectedIcon: Icon(Icons.school),
+            label: 'Cursos',
           ),
           NavigationDestination(
-            icon: Icon(Icons.bar_chart_outlined),
-            selectedIcon: Icon(Icons.bar_chart),
+            icon: Icon(Icons.analytics_outlined),
+            selectedIcon: Icon(Icons.analytics),
             label: 'Métricas',
           ),
         ],

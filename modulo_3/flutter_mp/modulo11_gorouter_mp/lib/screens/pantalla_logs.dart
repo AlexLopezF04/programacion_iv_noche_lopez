@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../models/log_ssh.dart';
+import '../models/servidor_ssh.dart';
 
 class PantallaLogs extends StatelessWidget {
   final String servidorId;
@@ -11,15 +12,19 @@ class PantallaLogs extends StatelessWidget {
   Widget build(BuildContext context) {
     final logs = logsSimulados.where((l) => l.servidorId == servidorId).toList();
     final cs = Theme.of(context).colorScheme;
+    final curso = servidoresSimulados.firstWhere(
+      (s) => s.id == servidorId,
+      orElse: () => ServidorSSH(id: servidorId, nombre: 'Curso $servidorId', ip: '', puerto: 0, ssl: false),
+    );
 
     return Scaffold(
       appBar: AppBar(
-        title:           Text('Logs del servidor $servidorId'),
+        title:           Text('Lecciones: ${curso.nombre}'),
         backgroundColor: cs.primaryContainer,
         foregroundColor: cs.onPrimaryContainer,
       ),
       body: logs.isEmpty
-          ? const Center(child: Text('No hay logs para este servidor'))
+          ? const Center(child: Text('No hay lecciones para este curso'))
           : ListView.builder(
               itemCount: logs.length + 1,
               itemBuilder: (context, i) {
@@ -29,27 +34,32 @@ class PantallaLogs extends StatelessWidget {
                     child: OutlinedButton.icon(
                       onPressed: () => context.pop(),
                       icon:  const Icon(Icons.arrow_back),
-                      label: const Text('Volver al detalle'),
+                      label: const Text('Volver al curso'),
                     ),
                   );
                 }
                 final log = logs[i];
                 final colorNivel = switch (log.nivel) {
-                  'ERROR' => Colors.red,
-                  'WARN'  => Colors.orange,
-                  _       => Colors.green,
+                  'PENDIENTE' => Colors.grey,
+                  'PROGRESO'  => Colors.orange,
+                  _           => Colors.green,
                 };
                 return ListTile(
                   leading: CircleAvatar(
-                    backgroundColor: colorNivel.withValues(alpha: 0.2),
+                    backgroundColor: colorNivel.withValues(alpha: 0.1),
                     radius: 18,
-                    child: Text(log.nivel[0],
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: colorNivel, fontSize: 12)),
+                    child: Icon(
+                      switch (log.nivel) {
+                        'PENDIENTE' => Icons.radio_button_unchecked,
+                        'PROGRESO'  => Icons.play_circle_outline,
+                        _           => Icons.check_circle,
+                      },
+                      color: colorNivel,
+                      size: 20,
+                    ),
                   ),
-                  title:       Text(log.mensaje, style: const TextStyle(fontSize: 14)),
-                  subtitle:    Text(log.timestamp, style: const TextStyle(fontSize: 11)),
+                  title:       Text(log.mensaje, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                  subtitle:    Text(log.timestamp, style: TextStyle(fontSize: 11, color: colorNivel)),
                   isThreeLine: false,
                 );
               },
@@ -57,3 +67,4 @@ class PantallaLogs extends StatelessWidget {
     );
   }
 }
+

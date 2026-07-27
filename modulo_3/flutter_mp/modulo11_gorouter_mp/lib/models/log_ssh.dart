@@ -15,18 +15,19 @@ class LogSSH {
 }
 
 const logsSimulados = [
-  LogSSH(id: '1', servidorId: '1', timestamp: '2024-01-15 10:30:00',
-      nivel: 'INFO', mensaje: 'Conexion SSH establecida'),
-  LogSSH(id: '2', servidorId: '1', timestamp: '2024-01-15 10:31:15',
-      nivel: 'INFO', mensaje: 'Autenticacion exitosa'),
-  LogSSH(id: '3', servidorId: '1', timestamp: '2024-01-15 10:32:00',
-      nivel: 'WARN', mensaje: 'Uso de CPU superior al 80%'),
-  LogSSH(id: '4', servidorId: '1', timestamp: '2024-01-15 10:33:30',
-      nivel: 'ERROR', mensaje: 'Timeout en conexion a base de datos'),
-  LogSSH(id: '5', servidorId: '2', timestamp: '2024-01-15 09:00:00',
-      nivel: 'INFO', mensaje: 'Servicio reiniciado correctamente'),
-  LogSSH(id: '6', servidorId: '2', timestamp: '2024-01-15 09:05:20',
-      nivel: 'INFO', mensaje: 'Backup completado'),
-  LogSSH(id: '7', servidorId: '3', timestamp: '2024-01-14 18:00:00',
-      nivel: 'WARN', mensaje: 'Puerto 2222 no estandar detectado'),
+  LogSSH(id: '1', servidorId: '1', timestamp: 'Completado ✓',
+      nivel: 'COMPLETO', mensaje: 'Clase 1: Introducción a Dart y Programación Funcional'),
+  LogSSH(id: '2', servidorId: '1', timestamp: 'Completado ✓',
+      nivel: 'COMPLETO', mensaje: 'Clase 2: Estructuras de datos básicas en Dart'),
+  LogSSH(id: '3', servidorId: '1', timestamp: 'En Progreso ⋯',
+      nivel: 'PROGRESO', mensaje: 'Clase 3: Widgets Básicos en Flutter'),
+  LogSSH(id: '4', servidorId: '1', timestamp: 'Pendiente 𐄂',
+      nivel: 'PENDIENTE', mensaje: 'Clase 4: Layouts Complejos y Rows/Columns'),
+  LogSSH(id: '5', servidorId: '2', timestamp: 'Completado ✓',
+      nivel: 'COMPLETO', mensaje: 'Clase 1: Introducción a Bases de Datos Relacionales'),
+  LogSSH(id: '6', servidorId: '2', timestamp: 'Pendiente 𐄂',
+      nivel: 'PENDIENTE', mensaje: 'Clase 2: Consultas Avanzadas SELECT & JOIN'),
+  LogSSH(id: '7', servidorId: '3', timestamp: 'Completado ✓',
+      nivel: 'COMPLETO', mensaje: 'Clase 1: Configurando Node.js y primer Hola Mundo'),
 ];
+
