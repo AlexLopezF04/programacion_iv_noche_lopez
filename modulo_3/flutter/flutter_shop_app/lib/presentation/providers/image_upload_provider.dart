@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../data/remote/api/image_upload_service.dart';
 
@@ -30,24 +29,18 @@ class ImageUploadError extends ImageUploadState {
 class ImageUploadNotifier extends StateNotifier<ImageUploadState> {
   ImageUploadNotifier({
     ImageUploadService? service,
-    ImagePicker? picker,
+    Future<File?> Function()? imagePicker,
   })  : _service = service ?? ImageUploadService(),
-        _picker = picker ?? ImagePicker(),
+        _imagePicker = imagePicker ?? _defaultImagePicker,
         super(const ImageUploadIdle());
 
   final ImageUploadService _service;
-  final ImagePicker _picker;
+  final Future<File?> Function() _imagePicker;
+
+  static Future<File?> _defaultImagePicker() async => null;
 
   Future<File?> _pickImage() async {
-    final picked = await _picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 90,
-      maxWidth: 1920,
-      maxHeight: 1920,
-    );
-
-    if (picked == null) return null;
-    return File(picked.path);
+    return _imagePicker();
   }
 
   Future<void> _handleUpload(Future<String?> Function(File) upload) async {
