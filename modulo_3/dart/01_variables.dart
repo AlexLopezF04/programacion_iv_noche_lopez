@@ -12,7 +12,7 @@ void main() {
   double pi       = 3.14159;
   bool   visible  = false;
 
-  print('$nombre $apellido tiene $edad años. Stock: $stock, Activo: $activo');
+  print('$nombre $apellido tiene $edad años. Precio: 2${precio}, Stock: $stock, Activo: $activo, Pi: $pi, Visible: $visible');
 
 
   // === 2. FINAL VS CONST ===
@@ -28,13 +28,14 @@ void main() {
   final ahora  = DateTime.now();   // OK — se evalúa en runtime
   // const ahora = DateTime.now(); // ERROR 
 
-  print('Gravedad: $gravedad, Pi2: $pi2, Hora actual: $ahora');
+  print('Gravedad: $gravedad, Pi2: $pi2, Ciudad: $ciudad, Hora actual: $ahora');
 
 
   // === 3. MUTABILIDAD ===
   // var — mutable, tipo inferido
   var contador = 0;
   contador = 1;          // OK — Ahora está dentro de main
+  print('Contador: $contador');
 
   // final — inmutable referencia, evaluado en runtime
   final lista = [1, 2, 3];
@@ -43,12 +44,14 @@ void main() {
 
   // const — inmutable profundo, evaluado en compilación
   const colores = ['rojo', 'azul'];
+  print('Colores: $colores');
   // colores.add('verde'); // ERROR en runtime — lista const es completamente inmutable
 
 
   // === 4. NULL SAFETY ===
   // Tipo no-nullable — NUNCA puede ser null (Ya no duplicamos 'nombre', usamos 'nombre2')
   String nombre2 = 'Carlos';
+  print('nombre2: $nombre2');
   // nombre2 = null;       // ERROR de compilación
 
   // Tipo nullable — puede ser null (añadir ?) (Modificamos el 'apellido' existente)
@@ -56,19 +59,17 @@ void main() {
   apellidoNullable = 'Gómez';        // OK
 
   // Operadores de null safety
-  String? otraCiudad; // Por defecto es null
+  String? otraCiudad = 'Lima'; // Por defecto es null
 
   // ?. — safe call
-  print(otraCiudad?.length);      // null — no lanza excepción
+  print(otraCiudad.length);      // null — no lanza excepción
 
   // ?? — operador Elvis
-  String resultado = otraCiudad ?? 'Sin ciudad';
+  String resultado = otraCiudad;
   print(resultado);           // Sin ciudad
 
-  // Null check con if
-  if (apellidoNullable != null) {
-    print(apellidoNullable.length);   // smart cast — seguro aquí
-  }
+  // Null check — ya no es necesario porque no es null
+  print(apellidoNullable.length);   // smart cast — seguro aquí
 
 
   // === 5. LATE (Inicialización diferida) ===

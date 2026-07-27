@@ -22,6 +22,7 @@ Mayor:  ${edad >= 18 ? 'Sí' : 'No'}
   print(ruta);
 
   // Concatenación (menos idiomático — preferir interpolación)
+  // ignore: unused_local_variable
   final saludo = 'Hola, ' + nombre + '!';
 
   // Métodos útiles de String
